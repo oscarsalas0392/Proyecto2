@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto2.Data.Interfaces;
-using Proyecto2.Notificacion;
+using Proyecto2.Respuesta;
+using Proyecto2.Respuesta;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,11 @@ namespace Proyecto2.Data.ClasesBase
             _db = db;
         }
 
-        public virtual async Task<Notificacion<T>> Guardar(T model)
+        public virtual async Task<Respuesta<T>> Guardar(T model)
         {
             try
             {
-                if (_db is null) { return new Notificacion<T>(true, Accion.agregar, true); }
+                if (_db is null) { return new Respuesta<T>(true, Accion.agregar, true); }
 
                 PropertyInfo propertyInfo = model.GetType().GetProperty("Eliminado");
                 propertyInfo.SetValue(model, false);
@@ -38,21 +39,21 @@ namespace Proyecto2.Data.ClasesBase
                 int resultado = await _db.SaveChangesAsync();
                 bool blnResultado = resultado == 1 ? true : false;
 
-                Notificacion<T> notificacion = new Notificacion<T>(blnResultado, Accion.agregar);
-                notificacion.objecto = model;
-                return notificacion;
+                Respuesta<T> Respuesta = new Respuesta<T>(blnResultado, Accion.agregar);
+                Respuesta.objecto = model;
+                return Respuesta;
 
             }
             catch (Exception)
             {
-                return new Notificacion<T>(true, Accion.agregar, true);
+                return new Respuesta<T>(true, Accion.agregar, true);
             }
         }
-        public virtual async Task<Notificacion<T>> Actualizar(T model)
+        public virtual async Task<Respuesta<T>> Actualizar(T model)
         {
             try
             {
-                if (_db is null) { return new Notificacion<T>(true, Accion.actualizar, true); }
+                if (_db is null) { return new Respuesta<T>(true, Accion.actualizar, true); }
 
                 PropertyInfo propertyInfo = model.GetType().GetProperty("Eliminado");
                 propertyInfo.SetValue(model, false);
@@ -61,21 +62,21 @@ namespace Proyecto2.Data.ClasesBase
                 int resultado = await _db.SaveChangesAsync();
                 bool blnResultado = resultado == 1 ? true : false;
 
-                Notificacion<T> notificacion = new Notificacion<T>(blnResultado, Accion.actualizar);
-                return notificacion;
+                Respuesta<T> Respuesta = new Respuesta<T>(blnResultado, Accion.actualizar);
+                return Respuesta;
 
             }
             catch (Exception)
             {
-                return new Notificacion<T>(true, Accion.actualizar, true);
+                return new Respuesta<T>(true, Accion.actualizar, true);
             }
         }
-        public virtual async Task<Notificacion<T>> ObtenerId(TK? key)
+        public virtual async Task<Respuesta<T>> ObtenerId(TK? key)
         {
 
             try
             {
-                if (_db is null || key is null) { return new Notificacion<T>(false, Accion.obtener); }
+                if (_db is null || key is null) { return new Respuesta<T>(false, Accion.obtener); }
 
                 IQueryable<T> query = _db.Set<T>();
 
@@ -86,14 +87,14 @@ namespace Proyecto2.Data.ClasesBase
                 }
 
                 T? objecto = await query.Where($"{_columnaPK} = {key}").FirstOrDefaultAsync();
-                Notificacion<T> notificacion = new Notificacion<T>(objecto is not null, Accion.obtener);
-                notificacion.objecto = objecto;
-                return notificacion;
+                Respuesta<T> Respuesta = new Respuesta<T>(objecto is not null, Accion.obtener);
+                Respuesta.objecto = objecto;
+                return Respuesta;
 
             }
             catch (Exception)
             {
-                return new Notificacion<T>(true, Accion.obtener, true);
+                return new Respuesta<T>(true, Accion.obtener, true);
             }
 
         }
@@ -102,12 +103,12 @@ namespace Proyecto2.Data.ClasesBase
 
         }
 
-        public virtual async Task<Notificacion<T>> ObtenerLista(Filtro? pFiltro = null)
+        public virtual async Task<Respuesta<T>> ObtenerLista(Filtro? pFiltro = null)
         {
             try
             {
                 var result = new List<T>();
-                if (_db is null) { return new Notificacion<T>(true, Accion.obtener, true); }
+                if (_db is null) { return new Respuesta<T>(true, Accion.obtener, true); }
 
                 if (pFiltro == null)
                 {
@@ -140,29 +141,29 @@ namespace Proyecto2.Data.ClasesBase
                         Take(pFiltro.tamanoPagina).ToListAsync();
                 }
 
-                Notificacion<T> notificacion = new Notificacion<T>(result is not null, Accion.obtenerLista);
-                notificacion.lista = result;
-                return notificacion;
+                Respuesta<T> Respuesta = new Respuesta<T>(result is not null, Accion.obtenerLista);
+                Respuesta.lista = result;
+                return Respuesta;
             }
             catch (Exception)
             {
-                Notificacion<T> notificacion = new Notificacion<T>(true, Accion.obtener, true);
-                notificacion.lista = new List<T>();
-                return notificacion;
+                Respuesta<T> Respuesta = new Respuesta<T>(true, Accion.obtener, true);
+                Respuesta.lista = new List<T>();
+                return Respuesta;
             }
         }
-        public virtual async Task<Notificacion<T>> Eliminar(TK key)
+        public virtual async Task<Respuesta<T>> Eliminar(TK key)
         {
             try
             {
-                if (_db is null) { return new Notificacion<T>(true, Accion.obtener, true); }
-                Notificacion<T> notificacion = await ObtenerId(key);
-                if (!notificacion._estado || notificacion._excepcion || notificacion.objecto is null)
+                if (_db is null) { return new Respuesta<T>(true, Accion.obtener, true); }
+                Respuesta<T> Respuesta = await ObtenerId(key);
+                if (!Respuesta._estado || Respuesta._excepcion || Respuesta.objecto is null)
                 {
-                    return notificacion;
+                    return Respuesta;
                 }
 
-                T? objecto = notificacion.objecto;
+                T? objecto = Respuesta.objecto;
                 PropertyInfo propertyInfo = objecto.GetType().GetProperty("Eliminado");
                 propertyInfo.SetValue(objecto, true);
 
@@ -170,23 +171,23 @@ namespace Proyecto2.Data.ClasesBase
                 int resultado = await _db.SaveChangesAsync();
                 bool blnResultado = resultado == 1 ? true : false;
 
-                Notificacion<T> notificacionActualizar = new Notificacion<T>(blnResultado, Accion.eliminar);
-                return notificacionActualizar;
+                Respuesta<T> RespuestaActualizar = new Respuesta<T>(blnResultado, Accion.eliminar);
+                return RespuestaActualizar;
             }
             catch (Exception)
             {
-                return new Notificacion<T>(true, Accion.eliminar, true);
+                return new Respuesta<T>(true, Accion.eliminar, true);
             }
 
         }
-        public virtual async Task<Notificacion<T>> Buscar(string filtro, Filtro pFiltro)
+        public virtual async Task<Respuesta<T>> Buscar(string filtro, Filtro pFiltro)
         {
             try
             {
                 filtro = filtro == null ? "" : filtro;
                 var result = new List<T>();
 
-                if (_db is null) { return new Notificacion<T>(true, Accion.obtenerLista, true); }
+                if (_db is null) { return new Respuesta<T>(true, Accion.obtenerLista, true); }
 
                 IQueryable<T> query = _db.Set<T>();
 
@@ -209,15 +210,15 @@ namespace Proyecto2.Data.ClasesBase
                     Skip((pFiltro.numeroPagina - 1) * pFiltro.tamanoPagina).
                     Take(pFiltro.tamanoPagina).ToListAsync();
 
-                Notificacion<T> notificacion = new Notificacion<T>(result is not null, Accion.obtenerLista);
-                notificacion.lista = result;
-                return notificacion;
+                Respuesta<T> Respuesta = new Respuesta<T>(result is not null, Accion.obtenerLista);
+                Respuesta.lista = result;
+                return Respuesta;
             }
             catch (Exception)
             {
-                Notificacion<T> notificacion = new Notificacion<T>(true, Accion.obtener, true);
-                notificacion.lista = new List<T>();
-                return notificacion;
+                Respuesta<T> Respuesta = new Respuesta<T>(true, Accion.obtener, true);
+                Respuesta.lista = new List<T>();
+                return Respuesta;
             }
         }
     }

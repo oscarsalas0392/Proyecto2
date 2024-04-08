@@ -1,4 +1,5 @@
 ﻿using Proyecto2.Notificacion;
+using Proyecto2.Respuesta;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace Proyecto2.Data.Interfaces
 {
     public interface IRepositorio<T, TK> : IDisposable
     {
-        Task<Notificacion<T>> Guardar(T model);
-        Task<Notificacion<T>> Actualizar(T model);
-        Task<Notificacion<T>> ObtenerId(TK? key);
-        Task<Notificacion<T>> ObtenerLista(Filtro? pf = null);
-        Task<Notificacion<T>> Eliminar(TK key);
-        Task<Notificacion<T>> Buscar(string filtro, Filtro pf);
+        Task<Respuesta<T>> Guardar(T model);
+        Task<Respuesta<T>> Actualizar(T model);
+        Task<Respuesta<T>> ObtenerId(TK? key);
+        Task<Respuesta<T>> ObtenerLista(Filtro? pf = null);
+        Task<Respuesta<T>> Eliminar(TK key);
+        Task<Respuesta<T>> Buscar(string filtro, Filtro pf);
     }
 }
