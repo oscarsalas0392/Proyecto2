@@ -38,5 +38,33 @@ namespace Proyecto2.Data.ClasesRepository
 
         }
 
+        public override async Task<Respuesta<Usuario>> Guardar(Usuario model)
+        {
+            Usuario usuario = new Usuario()
+            {
+                NombreUsuario = model.NombreUsuario,
+                Correo = model.Correo, 
+                Contrasena = DecryptAndEncrypt.EncryptStringAES(model.Contrasena),
+                TipoUsuario = model.TipoUsuario,
+                Foto = null
+
+            };
+
+            List<Usuario> validaciones = _db.Usuario.Where(x => x.Correo == model.Correo || x.NombreUsuario == model.NombreUsuario).ToList();
+            Respuesta<Usuario> notificacion = new Respuesta<Usuario>(false, Accion.agregar);
+
+            if (validaciones.Exists(x => x.Correo == model.Correo))
+            {
+                notificacion.mensaje = Mensajes.EXISTS_EMAIL;
+                return notificacion;
+            }
+            if (validaciones.Exists(x => x.NombreUsuario == model.NombreUsuario))
+            {
+                notificacion.mensaje = Mensajes.EXISTS_USERNAME;
+                return notificacion;
+            }
+
+            return await base.Guardar(usuario);
+        }
     }
 }
