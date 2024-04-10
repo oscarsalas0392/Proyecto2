@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using Proyecto2.Model;
+@model Usuario
+
+<div class="container content_login">
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="row h-50">
+            <div class="col-xs-6 col-md-7 d-flex justify-content-center ">
+                <img class="w-100" src="~/images/fitness.jpg">
+            </div>
+            <div class="col-xs-6 col-md-5 ">
+                <form action="@Url.Action("Registrar","Acceso")" method="post">
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text input_login"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input required type="text" name="NombreUsuario" class="form-control" value="@(Model !=null ? Model.NombreUsuario : "")" placeholder="Usuario">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text input_login"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <input required type="email" name="Correo" class="form-control input_user" value="@(Model !=null ? Model.Correo : "")" placeholder="Correo">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text input_login"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input required type="password" name="Contrasena" class="form-control input_user" value="@(Model !=null ? Model.Contrasena : "")" placeholder="Contraseña">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text input_login"><i class="fas fa-users"></i></span>
+                        </div>
+                        <select asp-for="TipoUsuario" class="form-control" asp-items="ViewBag.TipoUsuario"></select>
+                    </div>
+
+                    @if (ViewData["Mensaje"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewData["Mensaje"]
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-center mt-3 login_container">
+                        <button type="submit" name="button" class="btn login_btn">Registrarse</button>
+                    </div>
+                </form>
+
+                <div class="mt-4">
+                    <div class="row links">
+                        <p class="col-xs-6 col-md-7 text-center">Ya tienes una cuenta?</p>
+                        <a class="col-xs-6 col-md-5 text-center" href="@Url.Action("Login","Acceso")" class="ml-2">Iniciar Sesion</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
