@@ -87,26 +87,20 @@ namespace Proyecto2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind(Prefix = "usuario")] Usuario usuario,[Bind(Prefix = "artista")] Artista artista, IFormFile? photo = null)
         {
+
+            UsuarioViewModel usuarioViewModel = new UsuarioViewModel();
             if (id != usuario.Id)
             {
                 return NotFound();
             }
-            artista.Enlace = $"{Request.Scheme}://{Request.Host.Value}{Request.Path.ToString().Replace("Edit","Details")}";
+           
             usuario.Contrasena = Usuario().Contrasena;
             usuario.TipoUsuario = Usuario().TipoUsuario;
             if (photo == null)
             {
                 usuario.Foto = Usuario().Foto;
             }
-
-            if (usuario.TipoUsuario == 1)
-            {
-
-                Respuesta<Artista>? resArtista = await _cRA.ObtenerId(id);
-                artista.Id = resArtista.objecto.Id;
-                artista.Usuario = resArtista.objecto.Usuario;
-            }
-            else 
+            if (usuario.TipoUsuario != 1)
             {
                 ModelState.Remove("artista.Usuario");
                 ModelState.Remove("artista.Nombre");
@@ -114,13 +108,6 @@ namespace Proyecto2.Controllers
                 ModelState.Remove("artista.Estilo");
                 ModelState.Remove("artista.Experiencia");
             }
-
-
-            UsuarioViewModel usuarioViewModel = new UsuarioViewModel();
-            usuarioViewModel.usuario = usuario;
-            usuarioViewModel.artista = artista;
-
-
 
             ModelState.Remove("usuario.Contrasena");
             ModelState.Remove("artista.Enlace");
@@ -135,30 +122,35 @@ namespace Proyecto2.Controllers
                         usuario.Foto = base64String;
                     }
                 }
-
-                if (usuarioViewModel.usuario.TipoUsuario == 1)
-                {
-                    Respuesta<Artista> resArtista = await _cRA.Actualizar(artista);
-
-                    if (!resArtista._estado || resArtista._excepcion)
-                    {
-                        return View(usuarioViewModel);
-                    }
-                }
-
                 Respuesta<Usuario> resUsuario = await _cRU.Actualizar(usuario);
 
                 if (!resUsuario._estado || resUsuario._excepcion)
                 {
+                    usuarioViewModel.usuario = usuario;
+                    usuarioViewModel.artista = artista;
                     return View(usuarioViewModel);
                 }
 
-               
+                if (Usuario().TipoUsuario == 1)
+                {
+                    Respuesta<Artista>? resArtista = await _cRA.ObtenerId(id);
+                    artista.Id = resArtista.objecto.Id;
+                    artista.Usuario = resArtista.objecto.Usuario;
+                    artista.Enlace = $"{Request.Scheme}://{Request.Host.Value}{Request.Path.ToString().Replace("Edit", "Details")}";
+                    resArtista = await _cRA.Actualizar(artista);
 
+                    if (!resArtista._estado || resArtista._excepcion)
+                    {
+                        usuarioViewModel.usuario = usuario;
+                        usuarioViewModel.artista = artista;
+                        return View(usuarioViewModel);
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
 
-
+            usuarioViewModel.usuario = usuario;
+            usuarioViewModel.artista = artista;
             return View(usuarioViewModel);
         }
 

@@ -19,7 +19,10 @@ namespace Proyecto2
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("PR")));
+            services.AddDbContextPool<Context>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("PR"));
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
             services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlServer(
                Configuration.GetConnectionString("PR")));
