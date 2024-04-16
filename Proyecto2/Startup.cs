@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Proyecto2.Data;
 using Proyecto2.Data.ClasesRepository;
 using Proyecto2.Data.Interfaces;
@@ -28,6 +29,7 @@ namespace Proyecto2
             services.AddRazorPages();
             services.AddSession();
 
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IRepositorio<Artista, int?>, ArtistaRepositorio>();
             services.AddTransient<IRepositorio<CategoriaObra, int?>, CategoriaObraRepositorio>();
             services.AddTransient<IRepositorio<ConfiguracionApp, int?>, ConfiguracionAppRepositorio>();
