@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Castle.Core.Resource;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Proyecto2.ClasesBase;
 using Proyecto2.Data;
 using Proyecto2.Data.ClasesRepository;
 using Proyecto2.Data.Interfaces;
@@ -14,7 +17,7 @@ using Proyecto2.ViewModels;
 
 namespace Proyecto2.Controllers
 {
-    public class UsuarioController : Controller
+    public class UsuarioController : BaseController
     {
         private readonly Context _context;
         private readonly UsuarioRepositorio _cRU;
@@ -82,31 +85,75 @@ namespace Proyecto2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreUsuario,Correo,TipoUsuario,Foto")] UsuarioViewModel usuarioViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind(Prefix = "usuario")] Usuario usuario,[Bind(Prefix = "artista")] Artista artista, IFormFile? photo = null)
         {
-            if (id != usuarioViewModel.usuario.Id)
+            if (id != usuario.Id)
             {
                 return NotFound();
             }
+            artista.Enlace = $"{Request.Scheme}://{Request.Host.Value}{Request.Path.ToString().Replace("Edit","Details")}";
+            usuario.Contrasena = Usuario().Contrasena;
+            usuario.TipoUsuario = Usuario().TipoUsuario;
+            if (photo == null)
+            {
+                usuario.Foto = Usuario().Foto;
+            }
 
+            if (usuario.TipoUsuario == 1)
+            {
+
+                Respuesta<Artista>? resArtista = await _cRA.ObtenerId(id);
+                artista.Id = resArtista.objecto.Id;
+                artista.Usuario = resArtista.objecto.Usuario;
+            }
+            else 
+            {
+                ModelState.Remove("artista.Usuario");
+                ModelState.Remove("artista.Nombre");
+                ModelState.Remove("artista.Informacion");
+                ModelState.Remove("artista.Estilo");
+                ModelState.Remove("artista.Experiencia");
+            }
+
+
+            UsuarioViewModel usuarioViewModel = new UsuarioViewModel();
+            usuarioViewModel.usuario = usuario;
+            usuarioViewModel.artista = artista;
+
+
+
+            ModelState.Remove("usuario.Contrasena");
+            ModelState.Remove("artista.Enlace");
             if (ModelState.IsValid)
             {
-                Respuesta<Usuario> resUsuario = await _cRU.Actualizar(usuarioViewModel.usuario);
-
-                if (!resUsuario._estado || resUsuario._excepcion)
+                if (photo != null)
                 {
-                    return View(usuarioViewModel);
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        photo.CopyTo(ms);
+                        string base64String = $"data:{photo.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+                        usuario.Foto = base64String;
+                    }
                 }
 
-                if(usuarioViewModel.usuario.TipoUsuario == 1)
+                if (usuarioViewModel.usuario.TipoUsuario == 1)
                 {
-                    Respuesta<Artista> resArtista = await _cRA.Actualizar(usuarioViewModel.artista);
+                    Respuesta<Artista> resArtista = await _cRA.Actualizar(artista);
 
                     if (!resArtista._estado || resArtista._excepcion)
                     {
                         return View(usuarioViewModel);
                     }
                 }
+
+                Respuesta<Usuario> resUsuario = await _cRU.Actualizar(usuario);
+
+                if (!resUsuario._estado || resUsuario._excepcion)
+                {
+                    return View(usuarioViewModel);
+                }
+
+               
 
                 return RedirectToAction(nameof(Index));
             }

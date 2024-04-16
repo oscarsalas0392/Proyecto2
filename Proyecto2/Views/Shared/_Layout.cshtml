@@ -1,13 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
 @using Proyecto2.Enums
 @using Proyecto2.Model
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 
 @{
-    string? json = @HttpContextAccessor.HttpContext.Session.GetString(SessionKey.usuario.ToString());
+    string? json = HttpContextAccessor.HttpContext.Session.GetString(SessionKey.usuario.ToString());
     bool login = json is null ? true : false;
- 
+    Usuario usuario = null;
+    if (!login)
+    {
+         usuario = JsonConvert.DeserializeObject<Usuario>(HttpContextAccessor.HttpContext.Session.GetString("usuario"));
+    }
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +49,25 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Acceso" asp-action="Login">Iniciar Sesion</a>
                             </li>
+                        }
+                        else
+                        {
+                            <button class="buttonPhoto">
+                                <a class="aPhoto nav-link text-dark" asp-route-id="@usuario?.Id" asp-controller="Usuario" asp-action="Edit">
+                                    @if (usuario?.Foto == null)
+                                    {
+                                        <img class="photoUser" src="~/images/person-circle.svg">
+
+                                    }
+                                    else
+                                    {
+                                        <img class="photoUser" src="@usuario.Foto">
+
+                                    }
+                                </a>
+                                <p>@usuario?.NombreUsuario</p>
+                            </button>
+                        
                         }
                     </ul>
                 </div>

@@ -66,7 +66,7 @@ namespace Proyecto2.Data.ClasesBase
                 return Respuesta;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new Respuesta<T>(true, Accion.actualizar, true);
             }
