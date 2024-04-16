@@ -15,12 +15,14 @@ namespace Proyecto2.Controllers
     {
         private readonly Context _context;
         private readonly UsuarioRepositorio _cRU;
+        private readonly ArtistaRepositorio _cRA;
         private readonly TipoUsuarioRepositorio _cRTU;
-        public AccesoController(Context context, UsuarioRepositorio cRU, TipoUsuarioRepositorio cRTU)
+        public AccesoController(Context context, UsuarioRepositorio cRU, TipoUsuarioRepositorio cRTU, ArtistaRepositorio cRA)
         {
             _context = context;
             _cRU = cRU;
             _cRTU = cRTU;
+            _cRA = cRA;
         }
         public IActionResult Login()
         {
@@ -68,7 +70,21 @@ namespace Proyecto2.Controllers
             else
             {
 
-                HttpContext.Session.SetString("usuario", JsonConvert.SerializeObject(respuesta.objecto));
+                if(oUsuario.TipoUsuario == 1)
+                {
+                    Artista artista = new Artista();
+                    artista.Usuario = respuesta.objecto.Id;
+                    artista.Informacion = "";
+                    artista.Experiencia = "";
+                    artista.Enlace = "";
+                    artista.Nombre = "";
+                    artista.Estilo = "";
+                    Respuesta<Artista> respArtista = await _cRA.Guardar(artista);
+                }
+
+                oUsuario.Id = respuesta.objecto.Id;
+
+                HttpContext.Session.SetString("usuario", JsonConvert.SerializeObject(oUsuario));
                 return RedirectToAction("Index", "Home");
             }
 

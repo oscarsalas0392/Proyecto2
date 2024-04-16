@@ -1,0 +1,58 @@
+﻿@using Proyecto2.ViewModels;
+
+@model UsuarioViewModel
+
+<a class="regresar" asp-action="Index" asp-controller="Home"><i class="fas fa-arrow-left"></i></a>
+
+<h4>Usuario</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+            <form asp-action="Edit" enctype="multipart/form-data">
+
+
+                <div class="form-group pt-3">
+                    <div class="content_photoEdit">
+                        @if (@Model.usuario?.Foto != null)
+                        {
+                            <img class="photoEdit" id="photoEdit" src="@Model.usuario?.Foto" />
+                        }
+                        else
+                        {
+                            <img class="photoEdit" id="photoEdit" src="../../images/person-circle.svg" />
+                        }
+
+                        <input id="picField" type="file" class="inputEditPhoto" name="photo" />
+                    </div>
+                </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="usuario.Id" />
+            <div class="form-group">
+                    <label asp-for="usuario.NombreUsuario" class="control-label"></label>
+                    <input asp-for="usuario.NombreUsuario" class="form-control" />
+                    <span asp-validation-for="usuario.NombreUsuario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="usuario.Correo" class="control-label"></label>
+                <input asp-for="usuario.Correo" class="form-control" />
+                <span asp-validation-for="usuario.Correo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="usuario.TipoUsuario" class="control-label"></label>
+                <select asp-for="usuario.TipoUsuario" class="form-control" asp-items="ViewBag.TipoUsuario"></select>
+                <span asp-validation-for="usuario.TipoUsuario" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

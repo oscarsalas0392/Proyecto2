@@ -13,6 +13,7 @@ namespace Proyecto2.Data.ClasesRepository
         public ArtistaRepositorio(Context db) : base(db)
         {
             lstIncludes.Add("UsuarioNavigation");
+            _columnaPK = "Usuario";
         }
     }
 }
