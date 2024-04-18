@@ -22,12 +22,16 @@ namespace Proyecto2.Controllers
         private readonly IRepositorio<ObraArte, int?> _cR;
         private readonly ObraArteRepositorio _cR2;
         private readonly CategoriaObraRepositorio _cRCO;
-        public ObraArteController(Context context, IRepositorio<ObraArte, int?> cR, ObraArteRepositorio cR2, CategoriaObraRepositorio cRCO)
+        private readonly DimensionObraRepositorio _cRDO;
+        private readonly ImagenObraRepositorio _cRIO;
+        public ObraArteController(Context context, IRepositorio<ObraArte, int?> cR, ObraArteRepositorio cR2, CategoriaObraRepositorio cRCO, DimensionObraRepositorio cRDO, ImagenObraRepositorio cRIO)
         {
             _context = context;
             _cR = cR;
             _cR2 = cR2;
             _cRCO = cRCO;
+            _cRDO = cRDO;
+            _cRIO = cRIO;
         }
 
         // GET: ObraArte
@@ -68,18 +72,32 @@ namespace Proyecto2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Artista,CategoriaObra,Titulo,Descripcion,Eliminado")] ObraArte obraArte)
+        public async Task<IActionResult> Create([Bind(Prefix = "obraArte")] ObraArte obraArte, [Bind(Prefix = "dimensionObra")] DimensionObra dimensionObra, IFormFile? photo = null)
         {
+            ObraArteViewModel obraArteViewModel = new ObraArteViewModel();
             obraArte.Artista = Artista().Id;
+            obraArteViewModel.obraArte = obraArte;
+            obraArteViewModel.dimensionObra = dimensionObra;
             if (ModelState.IsValid)
             {
-                Respuesta<ObraArte> respuestaObraArte = await _cR.Guardar(obraArte);
+                Respuesta<ObraArte> respObraArte = await _cR.Guardar(obraArte);
+
+                if (!respObraArte._estado || respObraArte._excepcion || respObraArte.objecto is null)
+                {
+                    return View(obraArteViewModel);
+                }
+
+                dimensionObra.ObraArte = respObraArte.objecto.Id;
+                Respuesta<DimensionObra> respDimensionObra = await _cRDO.Guardar(dimensionObra);
+                //Respuesta<ImagenObra> respImagenObra = await _cRIO.Guardar()
+
                 return RedirectToAction(nameof(Index));
             }
+         
 
             Respuesta<CategoriaObra> respuesta = await _cRCO.ObtenerLista();
             ViewData["CategoriaObra"] = new SelectList(respuesta.lista, "Id", "Descripcion");
-            return View(obraArte);
+            return View(obraArteViewModel);
         }
 
         // GET: ObraArte/Edit/5
