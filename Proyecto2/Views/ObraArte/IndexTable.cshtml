@@ -1,0 +1,36 @@
+﻿@using Proyecto2.ViewModels;
+@using Proyecto2.Model;
+@using Proyecto2.Data.ClasesRepository;
+@model IndexViewModel<ObraArte,ObraArteRepositorio,int?>
+
+<tbody id="result">
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>
+                @(item.Titulo)
+            </td>
+            <td>
+                @item.CategoriaObraNavigation.Descripcion
+            </td>
+            
+            <td>
+                <a class="icon_table" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-pen"></i></a>
+                <a class="icon_table" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-eye"></i></a>
+                <a class="icon_table" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+    }
+</tbody>
+<tfoot id="result">
+    <tr>
+        <td colspan="4">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.paginacion.elementosPagina; i++)
+                {
+                    <li class="page-item"><button class="page-link" data-page="@i" data-command="paging">@i</button></li>
+                }
+            </ul>
+        </td>
+    </tr>
+</tfoot>

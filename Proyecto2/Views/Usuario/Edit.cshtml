@@ -9,8 +9,6 @@
 <div class="row">
     <div class="col-md-4">
             <form asp-action="Edit" enctype="multipart/form-data">
-
-
                 <div class="form-group pt-3">
                     <div class="content_photoEdit">
                         @if (@Model.usuario?.Foto != null)
@@ -78,3 +76,24 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    document.getElementById('picField').onchange = function (evt) {
+        var tgt = evt.target || window.event.srcElement,
+            files = tgt.files;
+
+        // FileReader support
+        if (FileReader && files && files.length) {
+            var fr = new FileReader();
+            fr.onload = function () {
+                document.getElementById("photoEdit").src = fr.result;
+            }
+            fr.readAsDataURL(files[0]);
+        }
+
+        // Not supported
+        else {
+            // fallback -- perhaps submit the input to an iframe and temporarily store
+            // them on the server until the user's session ends.
+        }
+    }
+</script>

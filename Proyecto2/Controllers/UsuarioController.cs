@@ -75,7 +75,7 @@ namespace Proyecto2.Controllers
             }
 
             usuarioViewModel.usuario = resUsuario.objecto;
-            usuarioViewModel.artista = resArtista.objecto;
+            usuarioViewModel.artista = resArtista != null  ? resArtista.objecto : null;
 
             return View(usuarioViewModel);
         }
@@ -131,6 +131,8 @@ namespace Proyecto2.Controllers
                     return View(usuarioViewModel);
                 }
 
+                usuarioViewModel.usuario = usuario;
+
                 if (Usuario().TipoUsuario == 1)
                 {
                     Respuesta<Artista>? resArtista = await _cRA.ObtenerId(id);
@@ -138,15 +140,14 @@ namespace Proyecto2.Controllers
                     artista.Usuario = resArtista.objecto.Usuario;
                     artista.Enlace = $"{Request.Scheme}://{Request.Host.Value}{Request.Path.ToString().Replace("Edit", "Details")}";
                     resArtista = await _cRA.Actualizar(artista);
+                    usuarioViewModel.artista = artista;
 
                     if (!resArtista._estado || resArtista._excepcion)
-                    {
-                        usuarioViewModel.usuario = usuario;
-                        usuarioViewModel.artista = artista;
+                    {                     
                         return View(usuarioViewModel);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(usuarioViewModel);
             }
 
             usuarioViewModel.usuario = usuario;

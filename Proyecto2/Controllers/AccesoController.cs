@@ -50,8 +50,9 @@ namespace Proyecto2.Controllers
 
             else
             {
-
-                HttpContext.Session.SetString("usuario", JsonConvert.SerializeObject(notificacion.objecto));
+                Respuesta<Artista> respuestaArtista = await _cRA.ObtenerId(usuario.Id);
+                HttpContext.Session.SetString("usuario", JsonConvert.SerializeObject(usuario));
+                HttpContext.Session.SetString("artista", JsonConvert.SerializeObject(respuestaArtista.objecto));
                 return RedirectToAction("Index", "Home");
             }
 
@@ -80,11 +81,13 @@ namespace Proyecto2.Controllers
                     artista.Nombre = "";
                     artista.Estilo = "";
                     Respuesta<Artista> respArtista = await _cRA.Guardar(artista);
+                    HttpContext.Session.SetString("artista", JsonConvert.SerializeObject(respArtista.objecto));
                 }
 
                 oUsuario.Id = respuesta.objecto.Id;
 
-                HttpContext.Session.SetString("usuario", JsonConvert.SerializeObject(oUsuario));
+                HttpContext.Session.SetString("usuario", JsonConvert.SerializeObject(respuesta.objecto));
+          
                 return RedirectToAction("Index", "Home");
             }
 

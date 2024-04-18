@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Newtonsoft.Json;
 using Proyecto2.Data;
 using Proyecto2.Data.ClasesRepository;
 using Proyecto2.Data.Interfaces;
@@ -30,6 +31,13 @@ namespace Proyecto2
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            };
+
             services.AddSession();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

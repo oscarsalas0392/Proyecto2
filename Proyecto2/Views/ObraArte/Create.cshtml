@@ -1,0 +1,86 @@
+﻿
+@using Proyecto2.ViewModels;
+@model ObraArteViewModel;
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ObraArte</h4>
+<hr />
+
+<div class="row">
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Información General</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Dimensiones</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Imagenes</button>
+        </div>
+    </nav>
+    <div class="col-md-4">
+
+        <form asp-action="Create">
+
+
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+ 
+                    <div class="form-group">
+                        <label asp-for="obraArte.CategoriaObra" class="control-label"></label>
+                        <select asp-for="obraArte.CategoriaObra" class="form-control" asp-items="ViewBag.CategoriaObra"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="obraArte.Titulo" class="control-label"></label>
+                        <input asp-for="obraArte.Titulo" class="form-control" />
+                        <span asp-validation-for="obraArte.Titulo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="obraArte.Descripcion" class="control-label"></label>
+                        <input asp-for="obraArte.Descripcion" class="form-control" />
+                        <span asp-validation-for="obraArte.Descripcion" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="dimensionObra.Altura" class="control-label"></label>
+                            <input asp-for="dimensionObra.Altura" class="form-control" />
+                            <span asp-validation-for="dimensionObra.Altura" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="dimensionObra.Ancho" class="control-label"></label>
+                            <input asp-for="dimensionObra.Ancho" class="form-control" />
+                            <span asp-validation-for="dimensionObra.Ancho" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="dimensionObra.Profundidad" class="control-label"></label>
+                            <input asp-for="dimensionObra.Profundidad" class="form-control" />
+                            <span asp-validation-for="dimensionObra.Profundidad" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+                </div>
+            </div>
+
+    
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
