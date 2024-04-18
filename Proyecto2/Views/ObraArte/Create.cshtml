@@ -17,7 +17,7 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Información General</button>
             <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Dimensiones</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Imagenes</button>
+            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Imagenes</button>
         </div>
     </nav>
     <div class="col-md-4">
@@ -68,13 +68,22 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-
+                    
+                    
+                    <button class="form-group pt-3"> Agregar
+                        <div class="content_photoEdit">
+                            <input id="picField" type="file" class="inputEditPhoto" name="photo" />
+                        </div>
+                    </button>
+                    <div class="row" id="content_Img">
+                    </div>
                 </div>
             </div>
 
     
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+
             </div>
         </form>
     </div>
@@ -84,3 +93,31 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    document.getElementById('picField').onchange = function (evt) {
+        var tgt = evt.target || window.event.srcElement,
+            files = tgt.files;
+
+
+
+        // FileReader support
+        if (FileReader && files && files.length) 
+        {
+            const content = document.getElementById('content_Img');
+            const newImg = document.createElement("img");
+            var fr = new FileReader();
+            fr.onload = function () {
+                newImg.src = fr.result;
+            }
+            fr.readAsDataURL(files[0]);
+
+            content.appendChild(newImg);
+        }
+
+        // Not supported
+        else {
+            // fallback -- perhaps submit the input to an iframe and temporarily store
+            // them on the server until the user's session ends.
+        }
+    }
+</script>
