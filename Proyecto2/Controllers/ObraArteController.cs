@@ -60,10 +60,35 @@ namespace Proyecto2.Controllers
         }
 
         // GET: ObraArte/Create
-        public async  Task<IActionResult> Create()
-        {    
-            Respuesta<CategoriaObra> respuesta = await _cRCO.ObtenerLista();        
+        public async  Task<IActionResult> Create(int? id)
+        {
+            Respuesta<CategoriaObra> respuesta = await _cRCO.ObtenerLista();
             ViewData["CategoriaObra"] = new SelectList(respuesta.lista, "Id", "Descripcion");
+
+            if (id != null)
+            {
+                Respuesta<ObraArte> respuestaObraArte = await _cR.ObtenerId(id);
+
+                if (!respuestaObraArte._estado || respuestaObraArte._excepcion || respuestaObraArte.objecto is null)
+                {
+                    return NotFound();
+                }
+
+                Respuesta<DimensionObra> respuestaDimensiones = await _cRDO.ObtenerId(id);
+
+                Filtro filtro = new Filtro();
+                filtro.obraArte = respuestaObraArte.objecto.Id;
+                Respuesta<ImagenObra> respuestaImagen = await _cRIO.ObtenerLista(filtro);
+
+                ObraArteViewModel obraArteViewModel = new ObraArteViewModel();
+
+                obraArteViewModel.obraArte =respuestaObraArte.objecto;
+                obraArteViewModel.dimensionObra = respuestaDimensiones.objecto;
+                obraArteViewModel.listImagenesObra = respuestaImagen.lista.ToList();
+
+                return View(obraArteViewModel);
+            }
+
             return View();
         }
 

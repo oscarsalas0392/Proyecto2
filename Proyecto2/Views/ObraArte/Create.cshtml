@@ -1,4 +1,5 @@
 ﻿
+@using Proyecto2.Model
 @using Proyecto2.ViewModels;
 @model ObraArteViewModel;
 
@@ -79,6 +80,14 @@
                     <input asp-for="listImgAgregar" class="form-control d-none" />
                     <input asp-for="listImgEliminar" class="form-control d-none" />
                     <div id="content_Img">
+
+                        @foreach(ImagenObra imagenObra in Model.listImagenesObra)
+                        {
+                            <div class="image_content">
+                                <div><a class="btn_delete"><img src="../../images/trash3.svg"></a></div>
+                                <img class="image_obraArte" src="@imagenObra.Imagen" />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

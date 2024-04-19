@@ -133,7 +133,8 @@ namespace Proyecto2.Data.ClasesBase
                     query = query
                         .Where($"Eliminado = false " +
                            $"{(pFiltro.usuario != null ? $" && Usuario = {pFiltro.usuario}" : "")} " +
-                           $"{(pFiltro.artista != null ? $" && Artista = {pFiltro.artista}" : "")}");
+                           $"{(pFiltro.artista != null ? $" && Artista = {pFiltro.artista}" : "")}" +
+                           $"{(pFiltro.obraArte != null ? $" && ObraArte = {pFiltro.obraArte}" : "")}" );
 
                     //Se obtiene la cantidad registros de la tabla
                     pFiltro.cantidadRegistros = await query.CountAsync();
