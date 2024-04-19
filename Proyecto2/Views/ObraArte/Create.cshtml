@@ -77,8 +77,8 @@
                     </button>
 
                     <input asp-for="listImgAgregar" class="form-control d-none" />
-
-                    <div class="row" id="content_Img">
+                    <input asp-for="listImgEliminar" class="form-control d-none" />
+                    <div id="content_Img">
                     </div>
                 </div>
             </div>
@@ -97,11 +97,11 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
+
+
     document.getElementById('picField').onchange = function (evt) {
         var tgt = evt.target || window.event.srcElement,
             files = tgt.files;
-
-
 
         // FileReader support
         if (FileReader && files && files.length) 
@@ -109,17 +109,31 @@
             const content = document.getElementById('content_Img');
             const inputImg = document.getElementById('listImgAgregar');
             const newDiv = document.createElement("div");
+            newDiv.className = "image_content"
             const newImg = document.createElement("img");
+            newImg.className = "image_obraArte"
             var fr = new FileReader();
             fr.onload = function () {
                 newImg.src = fr.result;
-                inputImg.value = fr.result + ";"
+                inputImg.value += fr.result + "^"
             }
             fr.readAsDataURL(files[0]);
 
-
+            newDiv.innerHTML = '<div><a class="btn_delete"><img src="../../images/trash3.svg"></a></div>'
             newDiv.appendChild(newImg);
             content.appendChild(newDiv);
+
+            const button = newDiv.querySelector('.btn_delete');
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                let divPrincipal = event.target.parentNode.parentNode.parentNode;
+                let img = divPrincipal.querySelector('.image_obraArte');
+                const inputImg = document.getElementById('listImgEliminar');
+                inputImg.value += img.src + "^"
+                divPrincipal.remove();
+                console.log('entro');
+            });
+
         }
 
         // Not supported

@@ -37,7 +37,7 @@ namespace Proyecto2.Controllers
         // GET: ObraArte
         public async Task<IActionResult> Index(IndexViewModel<ObraArte, ObraArteRepositorio, int?> vm)
         {
-            await vm.HandleRequest(_cR2, "Titulo", "Titulo", Usuario().Id);
+            await vm.HandleRequest(_cR2, "Titulo", "Titulo", artista:Artista().Id);
 
             if (Request.IsAjaxRequest())
             {
@@ -72,12 +72,15 @@ namespace Proyecto2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(Prefix = "obraArte")] ObraArte obraArte, [Bind(Prefix = "dimensionObra")] DimensionObra dimensionObra, [Bind(Prefix = "listImgAgregar")] string listImgAgregar, [Bind(Prefix = "listImgAgregar")] string listImgEliminar)
+        public async Task<IActionResult> Create([Bind(Prefix = "obraArte")] ObraArte obraArte, [Bind(Prefix = "dimensionObra")] DimensionObra dimensionObra, [Bind(Prefix = "listImgAgregar")] string listImgAgregar, [Bind(Prefix = "listImgEliminar")] string listImgEliminar)
         {
             ObraArteViewModel obraArteViewModel = new ObraArteViewModel();
             obraArte.Artista = Artista().Id;
             obraArteViewModel.obraArte = obraArte;
             obraArteViewModel.dimensionObra = dimensionObra;
+
+            ModelState.Remove("listImgAgregar");
+            ModelState.Remove("listImgEliminar");
             if (ModelState.IsValid)
             {
                 Respuesta<ObraArte> respObraArte = await _cR.Guardar(obraArte);
@@ -89,8 +92,18 @@ namespace Proyecto2.Controllers
 
                 dimensionObra.ObraArte = respObraArte.objecto.Id;
                 Respuesta<DimensionObra> respDimensionObra = await _cRDO.Guardar(dimensionObra);
-                //Respuesta<ImagenObra> respImagenObra = await _cRIO.Guardar()
+                List<string> agregar = listImgAgregar.Split('^').ToList(); 
+                List<string> eliminar = listImgEliminar == null ? new List<string>() :listImgEliminar.Split('^').ToList();
 
+                List<string> elementos = agregar.Where(x => eliminar.Contains(x) == false && x != "").ToList();
+                    
+                foreach(string imagen in elementos)
+                {
+                    ImagenObra imagenObra = new ImagenObra();
+                    imagenObra.Imagen = imagen;
+                    imagenObra.ObraArte = respObraArte.objecto.Id;
+                    Respuesta<ImagenObra> respImagenObra = await _cRIO.Guardar(imagenObra);
+                }  
                 return RedirectToAction(nameof(Index));
             }
          

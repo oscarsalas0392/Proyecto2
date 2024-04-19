@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto2.Data.Interfaces;
 using Proyecto2.Respuesta;
-using Proyecto2.Respuesta;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,11 +124,16 @@ namespace Proyecto2.Data.ClasesBase
                     }
 
                     //Configuracion de where
+
+                    string where = $"Eliminado = false " +
+                           $"{(pFiltro.usuario != null ? $" && Usuario = {pFiltro.usuario}" : "")} " +
+                           $"{(pFiltro.artista != null ? $" && Artista = {pFiltro.artista}" : "")}";
+
+
                     query = query
                         .Where($"Eliminado = false " +
                            $"{(pFiltro.usuario != null ? $" && Usuario = {pFiltro.usuario}" : "")} " +
-                           $"{(pFiltro.artista != null ? $" && Artista = {pFiltro.artista}" : "")}" +
-                           $")");
+                           $"{(pFiltro.artista != null ? $" && Artista = {pFiltro.artista}" : "")}");
 
                     //Se obtiene la cantidad registros de la tabla
                     pFiltro.cantidadRegistros = await query.CountAsync();
@@ -145,7 +149,7 @@ namespace Proyecto2.Data.ClasesBase
                 Respuesta.lista = result;
                 return Respuesta;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Respuesta<T> Respuesta = new Respuesta<T>(true, Accion.obtener, true);
                 Respuesta.lista = new List<T>();

@@ -14,11 +14,12 @@ namespace Proyecto2.ViewModels
         public Filtro paginacion { get; set; } = new Filtro() { columnaOrdenar = "Descripcion", columnaBuscar = "Descripcion" };
 
 
-        public async Task HandleRequest(TR cR, string columnaOrdenar = "Descripcion", string columnaBuscar = "Descripcion", int? usuario = null)
+        public async Task HandleRequest(TR cR, string columnaOrdenar = "Descripcion", string columnaBuscar = "Descripcion", int? usuario = null, int? artista = null)
         {
             paginacion.columnaBuscar = columnaBuscar;
             paginacion.columnaOrdenar = columnaOrdenar;
             paginacion.usuario = usuario;
+            paginacion.artista = artista;
             _cR = cR;
             await EjecutarComando(Command);
         }
