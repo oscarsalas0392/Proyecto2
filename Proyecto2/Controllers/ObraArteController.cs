@@ -72,7 +72,7 @@ namespace Proyecto2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(Prefix = "obraArte")] ObraArte obraArte, [Bind(Prefix = "dimensionObra")] DimensionObra dimensionObra, IFormFile? photo = null)
+        public async Task<IActionResult> Create([Bind(Prefix = "obraArte")] ObraArte obraArte, [Bind(Prefix = "dimensionObra")] DimensionObra dimensionObra, [Bind(Prefix = "listImgAgregar")] string listImgAgregar, [Bind(Prefix = "listImgAgregar")] string listImgEliminar)
         {
             ObraArteViewModel obraArteViewModel = new ObraArteViewModel();
             obraArte.Artista = Artista().Id;
