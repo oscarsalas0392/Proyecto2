@@ -1,5 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Proyecto2.Data;
+using Proyecto2.Data.ClasesRepository;
+using Proyecto2.Extensions;
+using Proyecto2.Model;
 using Proyecto2.Models;
+using Proyecto2.Respuesta;
+using Proyecto2.ViewModels;
 using System.Diagnostics;
 
 namespace Proyecto2.Controllers
@@ -7,20 +13,33 @@ namespace Proyecto2.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly Context _context;
+        private readonly SubastaRepositorio _cR;
+        public HomeController(ILogger<HomeController> logger, Context context, SubastaRepositorio cR)
         {
             _logger = logger;
+            _context = context;
+            _cR = cR;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(IndexViewModel<Subasta, SubastaRepositorio, int?> vm)
         {
-            return View();
+            vm.paginacion.fechaInicial = true;
+            vm.paginacion.fechaCierre = true;
+            await vm.HandleRequest(_cR, "ObraArteNavigation.Titulo", "ObraArteNavigation.Titulo");
+           
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("IndexTable", vm);
+            }
+            return View(vm);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Subasta(int id)
         {
-            return View();
+            Respuesta<Subasta> respuesta =  await _cR.ObtenerId(id);
+       
+            return View(respuesta.objecto);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -8,8 +8,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1> Subastas</h1>
+<h1>Agregar a Subasta</h1>
 
+<p>
+    <a class="btn btn-primary" asp-action="Create">Agregar</a>
+</p>
 <form id="form1" asp-antiforgery="false">
     <div class="d-flex flex-column">
         <div>
@@ -27,13 +30,16 @@
             <thead>
                 <tr>
                     <th>
-                        Obra
-                    </th>
-                    <th>
                         Titulo
                     </th>
                     <th>
+                        Precio Inicial
+                    </th>
+                    <th>
                         Precio Actual
+                    </th>
+                    <th>
+                        Fecha Inicial
                     </th>
                     <th>
                         Fecha Cierre

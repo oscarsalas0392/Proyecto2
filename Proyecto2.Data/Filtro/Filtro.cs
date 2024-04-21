@@ -30,14 +30,25 @@ namespace Proyecto2.Data
 
         public int? usuario { get; set; } = null;
         public int? artista { get; set; } = null;
-
         public int? obraArte { get; set; } = null;
+        public bool? fechaInicial { get; set; } = null;
+        public bool? fechaCierre { get; set; } = null;
+
+        public Dictionary<string, string> columnas { get; set; } = new Dictionary<string, string>();
+
+
         public Filtro()
         {
             numeroPagina = 1;
             tamanoPagina = 10;
             columnaOrdenar = "Id";
             tipoOrdernar = "ASC";
+            columnas.Add("Usuario", "Usuario");
+            columnas.Add("Artista", "Artista");
+            columnas.Add("ObraArte", "ObraArte");
+            columnas.Add("FechaInicial", "FechaInicial");
+            columnas.Add("FechaCierre", "FechaCierre");
         }
     }
+
 }

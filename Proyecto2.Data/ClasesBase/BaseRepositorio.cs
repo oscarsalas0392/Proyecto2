@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto2.Data.Interfaces;
+using Proyecto2.Model;
 using Proyecto2.Respuesta;
 using System;
 using System.Collections.Generic;
@@ -106,6 +107,17 @@ namespace Proyecto2.Data.ClasesBase
 
         }
 
+        public string ObtenerValorColumna(string key, Filtro? pFiltro=null)
+        {
+            if (pFiltro is null)
+            {
+                return "";
+            }
+            string valor;
+            pFiltro.columnas.TryGetValue(key, out valor);
+            return valor;
+        }
+
         public virtual async Task<Respuesta<T>> ObtenerLista(Filtro? pFiltro = null)
         {
             try
@@ -121,6 +133,12 @@ namespace Proyecto2.Data.ClasesBase
                 {
                     IQueryable<T> query = _db.Set<T>();
 
+                   string usuario = ObtenerValorColumna("Usuario", pFiltro);
+                   string artista = ObtenerValorColumna("Artista", pFiltro);
+                   string obraArte = ObtenerValorColumna("ObraArte", pFiltro);
+                   string fechaInicial = ObtenerValorColumna("FechaInicial", pFiltro);
+                   string fechaCierre = ObtenerValorColumna("FechaCierre", pFiltro);
+
                     //Configuracion de includes
                     foreach (string include in lstIncludes)
                     {
@@ -129,16 +147,13 @@ namespace Proyecto2.Data.ClasesBase
 
                     //Configuracion de where
 
-                    string where = $"Eliminado = false " +
-                           $"{(pFiltro.usuario != null ? $" && Usuario = {pFiltro.usuario}" : "")} " +
-                           $"{(pFiltro.artista != null ? $" && Artista = {pFiltro.artista}" : "")}";
-
-
                     query = query
                         .Where($"Eliminado = false " +
-                           $"{(pFiltro.usuario != null ? $" && Usuario = {pFiltro.usuario}" : "")} " +
-                           $"{(pFiltro.artista != null ? $" && Artista = {pFiltro.artista}" : "")}" +
-                           $"{(pFiltro.obraArte != null ? $" && ObraArte = {pFiltro.obraArte}" : "")}" );
+                           $"{(pFiltro.usuario != null ? $" && {usuario} = {pFiltro.usuario}" : "")} " +
+                           $"{(pFiltro.artista != null ? $" && {artista} = {pFiltro.artista}" : "")}" +
+                           $"{(pFiltro.fechaInicial != null ? $" && {fechaInicial} < DateTime.Now" : "")}" +
+                           $"{(pFiltro.fechaCierre != null ? $" && {fechaCierre} > DateTime.Now" : "")}" +
+                           $"{(pFiltro.obraArte != null ? $" && {obraArte} = {pFiltro.obraArte}" : "")}" );
 
                     //Se obtiene la cantidad registros de la tabla
                     pFiltro.cantidadRegistros = await query.CountAsync();
@@ -229,6 +244,17 @@ namespace Proyecto2.Data.ClasesBase
                 Respuesta.lista = new List<T>();
                 return Respuesta;
             }
+        }
+
+        public virtual Respuesta<Subasta> MostrarSubastasHome(Filtro? pFiltro = null)
+        {     
+            return new Respuesta<Subasta>(true, Accion.obtener, true);
+        }
+
+        public virtual Respuesta<Subasta> MostrarSubasta(Filtro? pFiltro = null)
+        {
+     
+            return new Respuesta<Subasta>(true, Accion.obtener, true);
         }
     }
 }
