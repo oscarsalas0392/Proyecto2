@@ -23,8 +23,10 @@
     </nav>
     <div class="col-md-4">
 
-        <form asp-action="Create">
+        <form asp-action="@( Model == null  ? "Create" : "Edit")">
 
+            <input type="hidden" asp-for="obraArte.Id" />
+            <input type="hidden" asp-for="dimensionObra.Id" />
 
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -79,14 +81,19 @@
 
                     <input asp-for="listImgAgregar" class="form-control d-none" />
                     <input asp-for="listImgEliminar" class="form-control d-none" />
-                    <div id="content_Img">
+                    <input asp-for="listImgEliminarId" class="form-control d-none" />
 
-                        @foreach(ImagenObra imagenObra in Model.listImagenesObra)
+                    <div id="content_Img">
+                        @if (Model != null)
                         {
-                            <div class="image_content">
-                                <div><a class="btn_delete"><img src="../../images/trash3.svg"></a></div>
-                                <img class="image_obraArte" src="@imagenObra.Imagen" />
-                            </div>
+                            @foreach (ImagenObra imagenObra in Model.listImagenesObra)
+                            {
+                                <div class="image_content">
+                                    <div><a onclick="clickId(@imagenObra.Id)" id="@imagenObra.Id" class="btn_delete"><img src="../../images/trash3.svg"></a></div>
+                                    <img class="image_obraArte" src="@imagenObra.Imagen" />
+                                </div>
+                            }
+                            
                         }
                     </div>
                 </div>
@@ -94,7 +101,7 @@
 
     
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
 
             </div>
         </form>
@@ -107,6 +114,14 @@
 }
 <script>
 
+    function clickId(id) 
+    {
+        const btnDelete = document.getElementById(id);
+        const divPrincipal = btnDelete.parentNode.parentNode.parentNode;
+        const inputImg = document.getElementById('listImgEliminarId');
+        inputImg.value += id + "^"
+        divPrincipal.remove();
+    }
 
     document.getElementById('picField').onchange = function (evt) {
         var tgt = evt.target || window.event.srcElement,
@@ -135,12 +150,13 @@
             const button = newDiv.querySelector('.btn_delete');
             button.addEventListener('click', (event) => {
                 event.preventDefault();
+                let id = event.target.id;
                 let divPrincipal = event.target.parentNode.parentNode.parentNode;
                 let img = divPrincipal.querySelector('.image_obraArte');
                 const inputImg = document.getElementById('listImgEliminar');
                 inputImg.value += img.src + "^"
                 divPrincipal.remove();
-                console.log('entro');
+          
             });
 
         }

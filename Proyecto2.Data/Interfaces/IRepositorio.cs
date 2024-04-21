@@ -11,7 +11,7 @@ namespace Proyecto2.Data.Interfaces
     {
         Task<Respuesta<T>> Guardar(T model);
         Task<Respuesta<T>> Actualizar(T model);
-        Task<Respuesta<T>> ObtenerId(TK? key);
+        Task<Respuesta<T>> ObtenerId(TK? key, bool includes = true);
         Task<Respuesta<T>> ObtenerLista(Filtro? pf = null);
         Task<Respuesta<T>> Eliminar(TK key);
         Task<Respuesta<T>> Buscar(string filtro, Filtro pf);

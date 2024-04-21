@@ -138,51 +138,60 @@ namespace Proyecto2.Controllers
             return View(obraArteViewModel);
         }
 
-        // GET: ObraArte/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            Respuesta<ObraArte> respuestaObraArte = await _cR.ObtenerId(id);
-
-            if (!respuestaObraArte._estado || respuestaObraArte._excepcion || respuestaObraArte.objecto is null)
-            {
-                return NotFound();
-            }
-
-
-            Respuesta<CategoriaObra> respuesta = await _cRCO.ObtenerLista();
-            ViewData["CategoriaObra"] = new SelectList(respuesta.lista, "Id", "Descripcion");
-
-            return View(respuestaObraArte.objecto);
-        }
 
         // POST: ObraArte/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Artista,CategoriaObra,Titulo,Descripcion,Eliminado")] ObraArte obraArte)
+        public async Task<IActionResult> Edit(int id, [Bind(Prefix = "obraArte")] ObraArte obraArte, [Bind(Prefix = "dimensionObra")] DimensionObra dimensionObra, [Bind(Prefix = "listImgAgregar")] string listImgAgregar, [Bind(Prefix = "listImgEliminar")] string listImgEliminar, [Bind(Prefix = "listImgEliminarId")] string listImgEliminarId)
         {
-            if (id != obraArte.Id)
-            {
-                return NotFound();
-            }
+            ObraArteViewModel obraArteViewModel = new ObraArteViewModel();
             obraArte.Artista = Artista().Id;
+            obraArteViewModel.obraArte = obraArte;
+            obraArteViewModel.dimensionObra = dimensionObra;
+
+            ModelState.Remove("listImgAgregar");
+            ModelState.Remove("listImgEliminar");
             if (ModelState.IsValid)
             {
-                Respuesta<ObraArte> respuestaObraArte = await _cR.Actualizar(obraArte);
+                Respuesta<ObraArte> respObraArte = await _cR.Actualizar(obraArte);
 
-                if (!respuestaObraArte._estado || respuestaObraArte._excepcion)
+                if (!respObraArte._estado || respObraArte._excepcion || respObraArte.objecto is null)
                 {
-                    return View(obraArte);
+                    return View("Create", obraArteViewModel);
+                }
+
+                dimensionObra.ObraArte = respObraArte.objecto.Id;
+                Respuesta<DimensionObra> respDimensionObra = await _cRDO.Actualizar(dimensionObra);
+                List<string> agregar = listImgEliminar == null  ? new List<string>() : listImgAgregar.Split('^').ToList();
+                List<string> eliminar = listImgEliminar == null ? new List<string>() : listImgEliminar.Split('^').ToList();
+
+                List<string> elementosAgregar = agregar.Where(x => eliminar.Contains(x) == false && x != "").ToList();
+
+                foreach (string imagen in elementosAgregar)
+                {
+                    ImagenObra imagenObra = new ImagenObra();
+                    imagenObra.Imagen = imagen;
+                    imagenObra.ObraArte = respObraArte.objecto.Id;
+                    Respuesta<ImagenObra> respImagenObra = await _cRIO.Guardar(imagenObra);
+                }
+
+                List<string> eliminarIds = listImgEliminarId.Split('^').ToList();
+                eliminarIds = eliminarIds.Where(x => x != "").ToList();
+
+                foreach (string idImagen in eliminarIds)
+                {
+
+                    Respuesta<ImagenObra> respImagenObra = await _cRIO.Eliminar(Convert.ToInt32(idImagen));
                 }
                 return RedirectToAction(nameof(Index));
-
-
             }
+
+
             Respuesta<CategoriaObra> respuesta = await _cRCO.ObtenerLista();
             ViewData["CategoriaObra"] = new SelectList(respuesta.lista, "Id", "Descripcion");
-
-            return View(obraArte);
+            return View("Create", obraArteViewModel);
         }
 
         // GET: ObraArte/Delete/5

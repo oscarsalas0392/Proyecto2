@@ -9,5 +9,6 @@ namespace Proyecto2.ViewModels
         public List<ImagenObra> listImagenesObra { get; set; }
         public string listImgAgregar { get; set; }
         public string listImgEliminar { get; set; }
+        public string listImgEliminarId { get; set; }
     }
 }

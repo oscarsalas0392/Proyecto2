@@ -62,6 +62,7 @@ namespace Proyecto2.Data.ClasesBase
                 bool blnResultado = resultado == 1 ? true : false;
 
                 Respuesta<T> Respuesta = new Respuesta<T>(blnResultado, Accion.actualizar);
+                Respuesta.objecto = model;
                 return Respuesta;
 
             }
@@ -70,7 +71,7 @@ namespace Proyecto2.Data.ClasesBase
                 return new Respuesta<T>(true, Accion.actualizar, true);
             }
         }
-        public virtual async Task<Respuesta<T>> ObtenerId(TK? key)
+        public virtual async Task<Respuesta<T>> ObtenerId(TK? key, bool includes = true)
         {
 
             try
@@ -80,12 +81,15 @@ namespace Proyecto2.Data.ClasesBase
                 IQueryable<T> query = _db.Set<T>();
 
                 //Configuracion de includes
-                foreach (string include in lstIncludes)
+                if (includes)
                 {
-                    query = query.Include(include);
+                    foreach (string include in lstIncludes)
+                    {
+                        query = query.Include(include);
+                    }
                 }
 
-                T? objecto = await query.Where($"{_columnaPK} = {key}").FirstOrDefaultAsync();
+                T? objecto = await query.AsNoTracking().Where($"{_columnaPK} = {key}").FirstOrDefaultAsync();
                 Respuesta<T> Respuesta = new Respuesta<T>(objecto is not null, Accion.obtener);
                 Respuesta.objecto = objecto;
                 return Respuesta;
@@ -162,7 +166,7 @@ namespace Proyecto2.Data.ClasesBase
             try
             {
                 if (_db is null) { return new Respuesta<T>(true, Accion.obtener, true); }
-                Respuesta<T> Respuesta = await ObtenerId(key);
+                Respuesta<T> Respuesta = await ObtenerId(key,false);
                 if (!Respuesta._estado || Respuesta._excepcion || Respuesta.objecto is null)
                 {
                     return Respuesta;
