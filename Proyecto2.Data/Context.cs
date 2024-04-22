@@ -10,10 +10,9 @@ namespace Proyecto2.Data;
 public partial class Context : DbContext
 {
     public Context(DbContextOptions<Context> options)
-        : base(options)
+          : base(options)
     {
     }
-
     public virtual DbSet<Artista> Artista { get; set; }
 
     public virtual DbSet<CategoriaObra> CategoriaObra { get; set; }
@@ -42,6 +41,8 @@ public partial class Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
         modelBuilder.Entity<Artista>(entity =>
         {
             entity.HasOne(d => d.UsuarioNavigation).WithMany(p => p.Artista)
@@ -77,6 +78,13 @@ public partial class Context : DbContext
             entity.HasOne(d => d.SubastaNavigation).WithMany(p => p.Mensaje)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Mensaje_Subasta");
+        });
+
+        modelBuilder.Entity<Notificacion>(entity =>
+        {
+            entity.HasOne(d => d.UsuarioNavigation).WithMany(p => p.Notificacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notificacion_Usuario");
         });
 
         modelBuilder.Entity<ObraArte>(entity =>

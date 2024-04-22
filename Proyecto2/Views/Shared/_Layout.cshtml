@@ -60,26 +60,37 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Acceso" asp-action="Login">Iniciar Sesion</a>
                             </li>
                         }
-                        else
-                        {
-                            <button class="buttonPhoto">
-                                <a class="aPhoto nav-link text-dark" asp-route-id="@usuario?.Id" asp-controller="Usuario" asp-action="Edit">
-                                    @if (usuario?.Foto == null)
-                                    {
-                                        <img class="photoUser" src="~/images/person-circle.svg">
-
-                                    }
-                                    else
-                                    {
-                                        <img class="photoUser" src="@usuario.Foto">
-
-                                    }
-                                </a>
-                                <p>@usuario?.NombreUsuario</p>
-                            </button>
-                        
-                        }
+                
                     </ul>
+
+                    @if (!login)
+                    {
+
+                        <button id="btn_modal" class="buttonPhoto" type="button"  data-toggle="modal" data-target="#myModal">
+                           <img class="photoUser" src="~/images/bell-fill.svg" />
+                       </button>
+
+
+         
+                    
+                       <button class="buttonPhoto">
+                           <a class="aPhoto nav-link text-dark" asp-route-id="@usuario?.Id" asp-controller="Usuario" asp-action="Edit">
+                               @if (usuario?.Foto == null)
+                               {
+                                   <img class="photoUser" src="~/images/person-circle.svg" />
+
+                               }
+                               else
+                               {
+                                   <img class="photoUser" src="@usuario.Foto" />
+
+                               }
+                               <p>@usuario.NombreUsuario</p>
+                           </a>
+
+                       </button>
+                        
+                    }
                 </div>
             </div>
         </nav>
@@ -87,7 +98,31 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Notificaciones</h4>
+                        </div>
+                        <div class="modal-body">
+                           <div class="content_notificacion">
+                               <h2 class="ntitle">1231</h2>
+                                <p class="dtitle">1231231231231232131231231213123123123123123</p>
+                                <p class="ftitle">22/04/2024</p>
+                           </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btn_modal_close" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </main>
+
     </div>
 
     <footer class="border-top footer text-muted">
@@ -98,6 +133,23 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+
+        const btn_modal = document.getElementById("btn_modal");
+        const btn_modal_close = document.getElementById("btn_modal_close");
+        btn_modal.addEventListener("click", () => {
+            console.log($("#myModal").modal);
+            $("#myModal").modal("show");
+        });
+
+        btn_modal_close.addEventListener("click", () => {
+            console.log($("#myModal").modal);
+            $("#myModal").modal("toggle");
+        });
+
+
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

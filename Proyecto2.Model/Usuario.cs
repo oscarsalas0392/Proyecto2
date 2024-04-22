@@ -42,6 +42,9 @@ public partial class Usuario
     public virtual ICollection<Mensaje> Mensaje { get; set; } = new List<Mensaje>();
 
     [InverseProperty("UsuarioNavigation")]
+    public virtual ICollection<Notificacion> Notificacion { get; set; } = new List<Notificacion>();
+
+    [InverseProperty("UsuarioNavigation")]
     public virtual ICollection<Oferta> Oferta { get; set; } = new List<Oferta>();
 
     [ForeignKey("TipoUsuario")]

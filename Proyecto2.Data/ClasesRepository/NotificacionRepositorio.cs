@@ -1,5 +1,6 @@
 ﻿using Proyecto2.Data.ClasesBase;
 using Proyecto2.Model;
+using Proyecto2.Respuesta;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace Proyecto2.Data.ClasesRepository
     {
         public NotificacionRepositorio(Context db) : base(db)
         {
+        }
+
+        public override Task<Respuesta<Notificacion>> Guardar(Notificacion model)
+        {
+            model.PorApp = true;
+            return base.Guardar(model);
         }
     }
 }

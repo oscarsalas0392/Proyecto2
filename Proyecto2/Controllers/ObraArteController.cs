@@ -106,6 +106,8 @@ namespace Proyecto2.Controllers
 
             ModelState.Remove("listImgAgregar");
             ModelState.Remove("listImgEliminar");
+            ModelState.Remove("obraArte.Id");
+            ModelState.Remove("dimensionObra.Id");
             if (ModelState.IsValid)
             {
                 Respuesta<ObraArte> respObraArte = await _cR.Guardar(obraArte);

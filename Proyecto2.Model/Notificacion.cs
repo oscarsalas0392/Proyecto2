@@ -13,10 +13,7 @@ public partial class Notificacion
     [Key]
     public int Id { get; set; }
 
-    [Required]
-    [StringLength(50)]
-    [Unicode(false)]
-    public string Correo { get; set; }
+    public int Usuario { get; set; }
 
     [Required]
     [StringLength(100)]
@@ -30,9 +27,17 @@ public partial class Notificacion
 
     public bool Enviado { get; set; }
 
+    public bool Leido { get; set; }
+
+    public bool PorApp { get; set; }
+
     [StringLength(500)]
     [Unicode(false)]
     public string Error { get; set; }
 
     public bool Eliminado { get; set; }
+
+    [ForeignKey("Usuario")]
+    [InverseProperty("Notificacion")]
+    public virtual Usuario UsuarioNavigation { get; set; }
 }
