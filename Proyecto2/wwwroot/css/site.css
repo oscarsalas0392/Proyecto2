@@ -84,16 +84,19 @@ body {
 .content_images {
     margin: 0;
     margin-top: 1rem;
+    gap: .5rem;
 }
 
 .btn_Image {
-    border:none;
-    padding:0;
-    max-width:4rem;
+    border: none;
+    padding: 0;
+    max-width: 4rem;
+    height: 4rem;
 }
 
 .image {
     max-width: 4rem;
+    height:100%;
 }
 
 .title {
@@ -104,4 +107,21 @@ body {
 .title_group {
 
     font-size:1.1rem;
+}
+
+.stitle {
+  font-size:1.3rem;
+}
+
+
+.dtitle {
+    font-size: 1.2rem;
+}
+
+.title_group {
+    font-weight:normal;
+}
+
+.content-image {
+  max-height:20rem;
 }

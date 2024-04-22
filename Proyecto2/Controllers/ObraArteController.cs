@@ -153,6 +153,7 @@ namespace Proyecto2.Controllers
 
             ModelState.Remove("listImgAgregar");
             ModelState.Remove("listImgEliminar");
+            ModelState.Remove("listImgEliminarId");
             if (ModelState.IsValid)
             {
                 Respuesta<ObraArte> respObraArte = await _cR.Actualizar(obraArte);
@@ -177,7 +178,7 @@ namespace Proyecto2.Controllers
                     Respuesta<ImagenObra> respImagenObra = await _cRIO.Guardar(imagenObra);
                 }
 
-                List<string> eliminarIds = listImgEliminarId.Split('^').ToList();
+                List<string> eliminarIds = listImgEliminarId == null ? new List<string>() : listImgEliminarId.Split('^').ToList();
                 eliminarIds = eliminarIds.Where(x => x != "").ToList();
 
                 foreach (string idImagen in eliminarIds)

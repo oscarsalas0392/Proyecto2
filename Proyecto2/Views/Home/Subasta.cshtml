@@ -3,32 +3,89 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-4">
-         <img src="@Model?.ObraArteNavigation?.ImagenObra?.FirstOrDefault()?.Imagen" class="w-100"/>
+<form asp-action="Ofertar" class="row">
+    <div class="col-4 content-image">
+         <img id="principalImage" src="@Model?.ObraArteNavigation?.ImagenObra?.FirstOrDefault()?.Imagen" class="w-100 h-100"/>
          <div class=" row content_images">
-            @foreach (ImagenObra imagenObra in Model?.ObraArteNavigation?.ImagenObra)
+            @foreach (ImagenObra imagenObra in Model?.ObraArteNavigation?.ImagenObra )
             {
                <button class="col btn_Image">
-                    <img src="@imagenObra.Imagen" class="image" />
+                    <img  src="@imagenObra.Imagen" class="image" />
                </button> 
             }
          </div>
      </div>
     <div class="col-8">
-        <h2 class="border-bottom pb-1">@Model.ObraArteNavigation.Titulo</h2>
+        <h2 class="border-bottom pb-1 stitle">@Model.ObraArteNavigation.Titulo</h2>
 
-        <p>Precio Actual: <span class="text-primary">@Model.PrecioActual $</span></p>
+        <input type="hidden" asp-for="Id" />
 
         <div class="group-info row">
-            <h3 class="col-sm-4 title_group">Artista</h3>
+            <h3 class="col-sm-4 title_group">Precio Actual:</h3>
+            <p class="col-sm-8"><span class="text-primary">@Model.PrecioActual $</span></p>
+        </div>
+
+        <div class="group-info row">
+            <h3 class="col-sm-4 title_group">Artista:</h3>
             <p  class="col-sm-8">@Model.ObraArteNavigation.ArtistaNavigation.Nombre</p>
         </div>
 
+        <div class="group-info row ">
+            <h3 class="col-sm-4 title_group">Categoría:</h3>
+            <p class="col-sm-8">@Model.ObraArteNavigation.CategoriaObraNavigation.Descripcion</p>
+        </div>
+
         <div class="group-info row border-bottom">
-            <h3 class="col-sm-4 title_group">Descripcion</h3>
+            <h3 class="col-sm-4 title_group">Descripción:</h3>
             <p  class="col-sm-8">@Model.ObraArteNavigation.Descripcion</p>
         </div>
- 
+
+        <div class="row">
+            <h3 class="pt-2 dtitle">Dimensiones</h3>
+
+            <div class="group-info row ">
+                <h3 class="col-sm-4 title_group">Altura:</h3>
+                <p class="col-sm-8">@Model?.ObraArteNavigation?.DimensionObra?.FirstOrDefault()?.Altura</p>
+            </div>
+
+            <div class="group-info row ">
+                <h3 class="col-sm-4 title_group">Ancho:</h3>
+                <p class="col-sm-8">@Model?.ObraArteNavigation?.DimensionObra?.FirstOrDefault()?.Ancho</p>
+            </div>
+
+            <div class="group-info row border-bottom">
+                <h3 class="col-sm-4 title_group">Profundidad:</h3>
+                <p class="col-sm-8">@Model?.ObraArteNavigation?.DimensionObra?.FirstOrDefault()?.Profundidad</p>
+            </div>
+        </div>
+        <div class="mt-2">
+            <input disabled type="number" id="inputPrecio" value="@((Model?.PrecioActual+100).ToString()?.Replace(",","."))" />
+            <input type="range" id="range" asp-for="PrecioActual" min="@((Model?.PrecioActual+100).ToString()?.Replace(",","."))" max="@((Model?.PrecioActual+500).ToString()?.Replace(",","."))" />
+        </div>
+
+        <button class="btn btn-success mt-2">Ofertar</button>
+
      </div>
-</div>
+</form>
+
+<script>
+
+    const images = document.querySelectorAll('.image');
+
+    images.forEach(x => { 
+        x.addEventListener('click', (event) => {
+            const src = event.target.src;
+            const principalImage = document.getElementById('principalImage');
+            principalImage.src = src;
+        });
+    })
+
+    const range = document.getElementById('range'); 
+
+
+    range.addEventListener('change', (event) => {
+        const value = event.target.value;
+        const inputPrecio = document.getElementById('inputPrecio');
+        inputPrecio.value = value;
+    });
+</script>

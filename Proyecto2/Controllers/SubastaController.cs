@@ -85,8 +85,8 @@ namespace Proyecto2.Controllers
 
 
             Respuesta<bool> respuestaExiste = _cR2.ExisteSubasta(subasta.ObraArte);
-            
 
+            ModelState.Remove("Id");
             if (ModelState.IsValid && !respuestaExiste.objecto)
             {
 
