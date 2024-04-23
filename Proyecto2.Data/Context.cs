@@ -118,6 +118,14 @@ public partial class Context : DbContext
 
         modelBuilder.Entity<Transaccion>(entity =>
         {
+            entity.HasOne(d => d.OfertaNavigation).WithMany(p => p.Transaccion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Transaccion_Oferta");
+
+            entity.HasOne(d => d.SubastaNavigation).WithMany(p => p.Transaccion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Transaccion_Subasta");
+
             entity.HasOne(d => d.UsuarioNavigation).WithMany(p => p.Transaccion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Transaccion_Usuario");

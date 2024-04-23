@@ -38,4 +38,7 @@ public partial class Subasta
 
     [InverseProperty("SubastaNavigation")]
     public virtual ICollection<Oferta> Oferta { get; set; } = new List<Oferta>();
+
+    [InverseProperty("SubastaNavigation")]
+    public virtual ICollection<Transaccion> Transaccion { get; set; } = new List<Transaccion>();
 }

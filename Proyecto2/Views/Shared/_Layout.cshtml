@@ -50,6 +50,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Subasta" asp-action="Index">Subasta</a>
                             </li>
                         }
+                        @if (usuario?.TipoUsuario == 2)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaccion" asp-action="Index">Transacciones</a>
+                            </li>
+                        }
 
                         @if (login)
                         {
@@ -99,6 +105,28 @@
         <main role="main" class="pb-3">
             @RenderBody()
 
+            @if (ViewBag.ganador != null)
+            {
+
+                <div class="modalWin" >
+                    <div>
+                        <!-- Modal content-->
+                        <div class="modalContent">
+                            <div class="modalHeader">
+                                <h4 class="modalTitle">Ganador</h4>
+                            </div>
+                            <div class="modalBody p-1">
+                                <p>Felicidades has ganado una subasta</p>
+                            </div>
+                            <div class="modalFooter">
+                                <a class="btn btn-success ml-1" asp-controller="Transaccion" asp-action="Create" asp-route-id="@ViewBag.ganador?.Id">Pagar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+  
+            }
+
             <div class="modal fade" id="myModal" role="dialog">
                 <div class="modal-dialog">
 
@@ -107,20 +135,22 @@
                         <div class="modal-header">
                             <h4 class="modal-title">Notificaciones</h4>
                         </div>
-                        <div class="modal-body">
-                            <div class="content_notificacion">
+                        <div class="modal-body p-1">
+                    
                              @if (ViewBag.notificaciones !=null)
                             {
                                     @foreach (Notificacion notificacion in ViewBag.notificaciones)
                                     {
-                                        <h2 class="ntitle">@notificacion.Titulo</h2>
-                                        <p class="dtitle">@notificacion.Descripcion</p>
-                                        <p class="ftitle">@notificacion.Fecha</p>
+                                        <div class="content_notificacion">
+                                            <h2 class="ntitle">@notificacion.Titulo</h2>
+                                            <p class="dtitle">@notificacion.Descripcion</p>
+                                            <p class="ftitle">@notificacion.Fecha</p>
+                                        </div>
                                     }
                                   
                             }
                    
-                           </div>
+                     
                         </div>
                         <div class="modal-footer">
                             <button id="btn_modal_close" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -143,7 +173,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
-
+        $("#Modal").modal("show");
         const btn_modal = document.getElementById("btn_modal");
         const btn_modal_close = document.getElementById("btn_modal_close");
         btn_modal.addEventListener("click", () => {

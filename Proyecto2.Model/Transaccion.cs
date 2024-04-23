@@ -15,10 +15,9 @@ public partial class Transaccion
 
     public int Usuario { get; set; }
 
-    public int ObraArte { get; set; }
+    public int Subasta { get; set; }
 
-    [Column(TypeName = "decimal(22, 2)")]
-    public decimal? Monto { get; set; }
+    public int Oferta { get; set; }
 
     [Required]
     [StringLength(18)]
@@ -29,6 +28,14 @@ public partial class Transaccion
     public DateTime Fecha { get; set; }
 
     public bool Eliminado { get; set; }
+
+    [ForeignKey("Oferta")]
+    [InverseProperty("Transaccion")]
+    public virtual Oferta OfertaNavigation { get; set; }
+
+    [ForeignKey("Subasta")]
+    [InverseProperty("Transaccion")]
+    public virtual Subasta SubastaNavigation { get; set; }
 
     [ForeignKey("Usuario")]
     [InverseProperty("Transaccion")]

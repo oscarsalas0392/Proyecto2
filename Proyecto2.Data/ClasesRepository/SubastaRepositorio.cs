@@ -18,7 +18,8 @@ namespace Proyecto2.Data.ClasesRepository
             lstIncludes.Add("ObraArteNavigation.ImagenObra");
             lstIncludes.Add("ObraArteNavigation.DimensionObra");
             lstIncludes.Add("ObraArteNavigation.CategoriaObraNavigation");
-            lstIncludes.Add("ObraArteNavigation.ArtistaNavigation");        
+            lstIncludes.Add("ObraArteNavigation.ArtistaNavigation");
+            lstIncludes.Add("Oferta");         
         }
 
         public  Respuesta<bool> ExisteSubasta(int idObra)

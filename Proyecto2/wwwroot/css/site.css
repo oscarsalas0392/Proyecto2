@@ -117,7 +117,7 @@ body {
 
 
 .dtitle {
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .title_group {
@@ -147,10 +147,41 @@ body {
     position: absolute;
     top: 0rem;
     right: 0.5rem;
+    font-size: .8rem;
 }
 
 .content_notificacion {
     position: relative;
-    border-top: 1px solid #dfdddd;
-    padding: .3rem;
+    padding: .5rem;
+    border-radius: 1rem;
+    background: #f3f3f3;
+    margin-top: 1rem;
+    font-size:1rem;
+}
+
+.ntitle {
+  font-size:1.1rem;
+}
+
+.modalWin {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background: #808080c4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modalContent {
+    background: white;
+    padding: 1rem;
+    width: 30rem;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: end;
 }

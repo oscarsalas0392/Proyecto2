@@ -44,6 +44,8 @@ namespace Proyecto2.Controllers
                 Respuesta<Notificacion> respuesta = await _cRN.ObtenerLista(filtro);
                 ViewBag.notificaciones = respuesta.lista;
 
+                Respuesta<Oferta> respOferta =  _cROF.VerificarGanador(usuario.Id);
+                ViewBag.ganador = respOferta.objecto;
             }
 
     

@@ -29,6 +29,9 @@ public partial class Oferta
     [InverseProperty("Oferta")]
     public virtual Subasta SubastaNavigation { get; set; }
 
+    [InverseProperty("OfertaNavigation")]
+    public virtual ICollection<Transaccion> Transaccion { get; set; } = new List<Transaccion>();
+
     [ForeignKey("Usuario")]
     [InverseProperty("Oferta")]
     public virtual Usuario UsuarioNavigation { get; set; }
