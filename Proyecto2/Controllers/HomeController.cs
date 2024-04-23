@@ -17,12 +17,14 @@ namespace Proyecto2.Controllers
         private readonly Context _context;
         private readonly SubastaRepositorio _cR;
         private readonly OfertaRepositorio _cROF;
-        public HomeController(ILogger<HomeController> logger, Context context, SubastaRepositorio cR, OfertaRepositorio cROF)
+        private readonly NotificacionRepositorio _cRN;
+        public HomeController(ILogger<HomeController> logger, Context context, SubastaRepositorio cR, OfertaRepositorio cROF, NotificacionRepositorio cRN)
         {
             _logger = logger;
             _context = context;
             _cR = cR;
             _cROF = cROF;
+            _cRN = cRN;
         }
 
         public async Task<IActionResult> Index(IndexViewModel<Subasta, SubastaRepositorio, int?> vm)
@@ -30,11 +32,27 @@ namespace Proyecto2.Controllers
             vm.paginacion.fechaInicial = true;
             vm.paginacion.fechaCierre = true;
             await vm.HandleRequest(_cR, "ObraArteNavigation.Titulo", "ObraArteNavigation.Titulo");
-           
+
+            string? json = HttpContext.Session.GetString("usuario");
+
+            if (json != null && json != "")
+            {
+                Usuario? usuario = JsonConvert.DeserializeObject<Usuario>(json);
+
+                Filtro filtro = new Filtro();
+                filtro.usuario = usuario.Id;
+                Respuesta<Notificacion> respuesta = await _cRN.ObtenerLista(filtro);
+                ViewBag.notificaciones = respuesta.lista;
+
+            }
+
+    
+
             if (Request.IsAjaxRequest())
             {
                 return PartialView("IndexTable", vm);
             }
+
             return View(vm);
         }
 
@@ -47,6 +65,8 @@ namespace Proyecto2.Controllers
 
         public  async Task<IActionResult> Ofertar([Bind("Id,ObraArte,PrecioInicial,PrecioActual,FechaInicial,FechaCierre,Eliminado")] Subasta subasta)
         {
+
+            Respuesta<Subasta> respuestaSubasta = await _cR.ObtenerId(subasta.Id);
             string? json = HttpContext.Session.GetString("usuario");
 
             if (json == null || json == "")
@@ -68,6 +88,9 @@ namespace Proyecto2.Controllers
             oferta.Monto = subasta.PrecioActual.Value;
 
             Respuesta<Oferta> respuesta = await _cROF.Guardar(oferta);
+
+            await _cRN.EnviarOfertaUsuarios(respuestaSubasta.objecto, usuario.Id);
+
 
             return RedirectToAction(nameof(Index));
         }

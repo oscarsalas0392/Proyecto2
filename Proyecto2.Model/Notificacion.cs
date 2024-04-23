@@ -25,17 +25,20 @@ public partial class Notificacion
     [Unicode(false)]
     public string Descripcion { get; set; }
 
+    [Column(TypeName = "datetime")]
+    public DateTime Fecha { get; set; }
+
     public bool Enviado { get; set; }
 
     public bool Leido { get; set; }
 
     public bool PorApp { get; set; }
 
+    public bool Eliminado { get; set; }
+
     [StringLength(500)]
     [Unicode(false)]
     public string Error { get; set; }
-
-    public bool Eliminado { get; set; }
 
     [ForeignKey("Usuario")]
     [InverseProperty("Notificacion")]

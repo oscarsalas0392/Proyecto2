@@ -108,10 +108,18 @@
                             <h4 class="modal-title">Notificaciones</h4>
                         </div>
                         <div class="modal-body">
-                           <div class="content_notificacion">
-                               <h2 class="ntitle">1231</h2>
-                                <p class="dtitle">1231231231231232131231231213123123123123123</p>
-                                <p class="ftitle">22/04/2024</p>
+                            <div class="content_notificacion">
+                             @if (ViewBag.notificaciones !=null)
+                            {
+                                    @foreach (Notificacion notificacion in ViewBag.notificaciones)
+                                    {
+                                        <h2 class="ntitle">@notificacion.Titulo</h2>
+                                        <p class="dtitle">@notificacion.Descripcion</p>
+                                        <p class="ftitle">@notificacion.Fecha</p>
+                                    }
+                                  
+                            }
+                   
                            </div>
                         </div>
                         <div class="modal-footer">

@@ -67,7 +67,21 @@ namespace Proyecto2.Respuesta
             Descripcion = "El email  ya existe, por favor digite uno nuevo"
         };
 
+        public static Mensaje OfertaSubasta = new Mensaje()
+        {
+            id = 5,
+            nivel = Nivel.Information,
+            titulo = "Oferta en subasta",
+            Descripcion = "Tu oferta ha sido superada en la subasta: "
+        };
 
+        public static Mensaje Oferta = new Mensaje()
+        {
+            id = 5,
+            nivel = Nivel.Information,
+            titulo = "Oferta en subasta",
+            Descripcion = "Has realizado una oferta en la subasta: "
+        };
 
     }
 }
