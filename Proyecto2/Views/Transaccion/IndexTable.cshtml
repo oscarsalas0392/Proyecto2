@@ -1,0 +1,35 @@
+﻿@using Proyecto2.ViewModels;
+@using Proyecto2.Model;
+@using Proyecto2.Data.ClasesRepository;
+@model IndexViewModel<Transaccion,TransaccionRepositorio,int?>
+
+<tbody id="result">
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>
+                @(item.SubastaNavigation.ObraArteNavigation.Titulo)
+            </td>
+    
+            <td>
+                @(item.OfertaNavigation.Monto)
+            </td>
+
+            <td>
+                @(item.Fecha)
+            </td>
+        </tr>
+    }
+</tbody>
+<tfoot id="result">
+    <tr>
+        <td colspan="4">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.paginacion.elementosPagina; i++)
+                {
+                    <li class="page-item"><button class="page-link" data-page="@i" data-command="paging">@i</button></li>
+                }
+            </ul>
+        </td>
+    </tr>
+</tfoot>

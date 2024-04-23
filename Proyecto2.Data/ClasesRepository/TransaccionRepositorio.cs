@@ -13,6 +13,10 @@ namespace Proyecto2.Data.ClasesRepository
         public TransaccionRepositorio(Context db) : base(db)
         {
             lstIncludes.Add("UsuarioNavigation");
+            lstIncludes.Add("SubastaNavigation");
+            lstIncludes.Add("OfertaNavigation");
+            lstIncludes.Add("SubastaNavigation.ObraArteNavigation");
+            
         }
     }
 }

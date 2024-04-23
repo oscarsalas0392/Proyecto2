@@ -2,15 +2,17 @@
 @using Proyecto2.ViewModels;
 @using Proyecto2.Model;
 
-@model IndexViewModel<Transaccion,TransaccionRepositorio,int?>
+@model IndexViewModel<Subasta,SubastaRepositorio,int?>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Transacciones</h1>
+<h1>Agregar a Subasta</h1>
 
-
+<p>
+    <a class="btn btn-primary" asp-action="Create">Agregar</a>
+</p>
 <form id="form1" asp-antiforgery="false">
     <div class="d-flex flex-column">
         <div>
@@ -28,15 +30,17 @@
             <thead>
                 <tr>
                     <th>
-                        Obra
+                        Titulo
                     </th>
                     <th>
-                       Monto
+                        Precio Actual
                     </th>
                     <th>
-                       Fecha
+                        Fecha Inicial
                     </th>
-                    <th></th>
+                    <th>
+                        Fecha Cierre
+                    </th>
                 </tr>
             </thead>
             @{

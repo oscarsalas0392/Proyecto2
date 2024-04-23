@@ -28,6 +28,9 @@ namespace Proyecto2.ViewModels
         {
             switch (comando)
             {
+                case "historial":
+                    await historial();
+                    break;
                 case "list":
                     await list();
                     break;
@@ -55,6 +58,15 @@ namespace Proyecto2.ViewModels
         async Task search()
         {
             Respuesta<T> notificacion = await _cR.Buscar(filtro.Descripcion, paginacion);
+            if (notificacion.lista != null)
+            {
+                Items = notificacion.lista;
+            }
+        }
+
+        async Task historial()
+        {
+            Respuesta<T> notificacion = await _cR.Historial(paginacion);
             if (notificacion.lista != null)
             {
                 Items = notificacion.lista;

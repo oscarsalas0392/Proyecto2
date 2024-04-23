@@ -5,25 +5,42 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Proyecto2.ClasesBase;
 using Proyecto2.Data;
+using Proyecto2.Data.ClasesRepository;
+using Proyecto2.Data.Interfaces;
+using Proyecto2.Extensions;
 using Proyecto2.Model;
+using Proyecto2.Respuesta;
+using Proyecto2.ViewModels;
 
 namespace Proyecto2.Controllers
 {
-    public class TransaccionController : Controller
+    public class TransaccionController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public TransaccionController(ApplicationDbContext context)
+        private readonly Context _context;
+        private readonly IRepositorio<Transaccion, int?> _cR;
+        private readonly TransaccionRepositorio _cR2;
+        private readonly OfertaRepositorio _cRO;
+        public TransaccionController(Context context, IRepositorio<Transaccion, int?> cR, TransaccionRepositorio cR2, OfertaRepositorio cRO)
         {
             _context = context;
+            _cR = cR;
+            _cR2 = cR2;
+            _cRO= cRO;
         }
 
         // GET: Transaccion
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(IndexViewModel<Transaccion, TransaccionRepositorio, int?> vm)
         {
-            var applicationDbContext = _context.Transaccion.Include(t => t.OfertaNavigation).Include(t => t.SubastaNavigation).Include(t => t.UsuarioNavigation);
-            return View(await applicationDbContext.ToListAsync());
+
+            await vm.HandleRequest(_cR2, "SubastaNavigation.ObraArteNavigation.Titulo", "SubastaNavigation.ObraArteNavigation.Titulo", Usuario().Id);
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("IndexTable", vm);
+            }
+            return View(vm);
         }
 
         // GET: Transaccion/Details/5
@@ -48,12 +65,16 @@ namespace Proyecto2.Controllers
         }
 
         // GET: Transaccion/Create
-        public IActionResult Create(int id)
+        public async Task<IActionResult> Create(int id)
         {
-            ViewData["Oferta"] = new SelectList(_context.Oferta, "Id", "Id");
-            ViewData["Subasta"] = new SelectList(_context.Subasta, "Id", "Id");
-            ViewData["Usuario"] = new SelectList(_context.Usuario, "Id", "Contrasena");
-            return View();
+             Respuesta<Oferta> respuesta =  await _cRO.ObtenerId(id);
+
+            Transaccion transaccion = new Transaccion();
+            transaccion.Usuario = respuesta.objecto.Usuario;
+            transaccion.Subasta = respuesta.objecto.Subasta;
+            transaccion.Oferta = respuesta.objecto.Id;
+
+            return View(transaccion);
         }
 
         // POST: Transaccion/Create
@@ -61,17 +82,15 @@ namespace Proyecto2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Usuario,Subasta,Oferta,Tarjeta,Fecha,Eliminado")] Transaccion transaccion)
+        public async Task<IActionResult> Create([Bind("Usuario,Subasta,Oferta,Tarjeta,Fecha,Eliminado")] Transaccion transaccion)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(transaccion);
-                await _context.SaveChangesAsync();
+                transaccion.Fecha = DateTime.Now;
+                Respuesta<Transaccion> respuesta = await _cR.Guardar(transaccion);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Oferta"] = new SelectList(_context.Oferta, "Id", "Id", transaccion.Oferta);
-            ViewData["Subasta"] = new SelectList(_context.Subasta, "Id", "Id", transaccion.Subasta);
-            ViewData["Usuario"] = new SelectList(_context.Usuario, "Id", "Contrasena", transaccion.Usuario);
+
             return View(transaccion);
         }
 

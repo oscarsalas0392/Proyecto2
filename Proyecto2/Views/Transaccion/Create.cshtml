@@ -12,6 +12,9 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Usuario" />
+            <input type="hidden" asp-for="Oferta" />
+            <input type="hidden" asp-for="Subasta" />
             <div class="form-group">
                 <label asp-for="Tarjeta" class="control-label"></label>
                 <input asp-for="Tarjeta" class="form-control" />

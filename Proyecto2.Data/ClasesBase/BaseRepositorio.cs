@@ -256,5 +256,10 @@ namespace Proyecto2.Data.ClasesBase
      
             return new Respuesta<Subasta>(true, Accion.obtener, true);
         }
+
+        public virtual Task<Respuesta<T>> Historial(Filtro? pf = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

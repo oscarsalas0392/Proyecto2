@@ -1,0 +1,40 @@
+﻿@using Proyecto2.ViewModels;
+@using Proyecto2.Model;
+@using Proyecto2.Data.ClasesRepository;
+@model IndexViewModel<Subasta,SubastaRepositorio,int?>
+
+<tbody id="result">
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>
+                @(item.ObraArteNavigation.Titulo)
+            </td>
+    
+            <td>
+                @(item.PrecioActual)
+            </td>
+
+            <td>
+                @(item.FechaInicial)
+            </td>
+
+            <td>
+                @(item.FechaCierre)
+            </td>
+
+        </tr>
+    }
+</tbody>
+<tfoot id="result">
+    <tr>
+        <td colspan="4">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.paginacion.elementosPagina; i++)
+                {
+                    <li class="page-item"><button class="page-link" data-page="@i" data-command="paging">@i</button></li>
+                }
+            </ul>
+        </td>
+    </tr>
+</tfoot>

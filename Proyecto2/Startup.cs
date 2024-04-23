@@ -53,6 +53,7 @@ namespace Proyecto2
             services.AddTransient<IRepositorio<Subasta, int?>, SubastaRepositorio>();
             services.AddTransient<IRepositorio<TipoUsuario, int?>, TipoUsuarioRepositorio>();
             services.AddTransient<IRepositorio<Usuario, int?>, UsuarioRepositorio>();
+            services.AddTransient<IRepositorio<Transaccion, int?>, TransaccionRepositorio>();
 
             services.AddTransient(typeof(ArtistaRepositorio));
             services.AddTransient(typeof(CategoriaObraRepositorio));
@@ -66,6 +67,7 @@ namespace Proyecto2
             services.AddTransient(typeof(SubastaRepositorio));
             services.AddTransient(typeof(TipoUsuarioRepositorio));
             services.AddTransient(typeof(UsuarioRepositorio));
+            services.AddTransient(typeof(TransaccionRepositorio));
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
