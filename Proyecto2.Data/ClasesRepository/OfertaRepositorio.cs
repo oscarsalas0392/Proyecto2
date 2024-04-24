@@ -25,8 +25,8 @@ namespace Proyecto2.Data.ClasesRepository
                 Subasta? subasta = _db.Subasta.Include("Oferta").Include("Transaccion")
                 .Where(x => x.FechaCierre < DateTime.Now && x.Oferta.Count > 0).FirstOrDefault();
 
-                Oferta? oferta = subasta.Oferta.LastOrDefault();
-                Transaccion? transaccion = subasta.Transaccion.FirstOrDefault();
+                Oferta? oferta = subasta?.Oferta?.LastOrDefault();
+                Transaccion? transaccion = subasta?.Transaccion?.FirstOrDefault();
 
                 if (subasta != null && oferta.Usuario == idUsuario && transaccion == null)
                 {

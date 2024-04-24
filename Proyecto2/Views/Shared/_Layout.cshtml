@@ -57,9 +57,13 @@
                             </li>
                         }
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Historial" asp-action="Index">Historial</a>
-                        </li>
+                        @if(usuario?.Id != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Historial" asp-action="Index">Historial</a>
+                            </li>
+                        }
+                   
 
                         @if (login)
                         {
@@ -177,7 +181,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
-        $("#Modal").modal("show");
+    
         const btn_modal = document.getElementById("btn_modal");
         const btn_modal_close = document.getElementById("btn_modal_close");
         btn_modal.addEventListener("click", () => {

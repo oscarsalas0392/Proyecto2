@@ -93,7 +93,7 @@ namespace Proyecto2.Data.ClasesRepository
 
                 List<Subasta> subastas = await query
                                                .Select(x => x.SubastaNavigation)
-                                               .OrderBy("Titulo").
+                                               .OrderBy(filtro.Ordenando).
                                                 Skip((filtro.numeroPagina - 1) * filtro.tamanoPagina).
                                                 Take(filtro.tamanoPagina)
                                                .ToListAsync();
