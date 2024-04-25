@@ -49,17 +49,16 @@ namespace Proyecto2.Data.ClasesRepository
         {
             try
             {
-                  IQueryable<Oferta> query = _db.Oferta;
+                  IQueryable<Subasta> query = _db.Subasta;
 
                   query = query
-                                .Include(x => x.SubastaNavigation)
-                                .Include(x => x.SubastaNavigation.ObraArteNavigation)
-                                .Where(x => x.Usuario == filtro.usuario);
+                                 .Include(x => x.ObraArteNavigation)
+                                 .Include(x => x.Oferta)
+                                 .Where(x => x.Oferta.FirstOrDefault(x=> x.Usuario == filtro.usuario) != null);
 
                 filtro.cantidadRegistros = await query.CountAsync();
 
                 List<Subasta> subastas = await query
-                                                 .Select(x => x.SubastaNavigation)
                                                  .OrderBy(filtro.Ordenando).
                                                   Skip((filtro.numeroPagina - 1) * filtro.tamanoPagina).
                                                   Take(filtro.tamanoPagina)
@@ -82,17 +81,16 @@ namespace Proyecto2.Data.ClasesRepository
         {
             try
             {
-                IQueryable<Oferta> query = _db.Oferta;
+                IQueryable<Subasta> query = _db.Subasta;
 
                 query = query
-                       .Include(x => x.SubastaNavigation)
-                       .Include(x => x.SubastaNavigation.ObraArteNavigation)
-                       .Where(x => x.SubastaNavigation.ObraArteNavigation.Artista == filtro.artista);
+                       .Include(x => x.ObraArteNavigation)
+                       .Include(x => x.Oferta)
+                       .Where(x => x.ObraArteNavigation.Artista == filtro.artista);
 
                 filtro.cantidadRegistros = await query.CountAsync();
 
                 List<Subasta> subastas = await query
-                                               .Select(x => x.SubastaNavigation)
                                                .OrderBy(filtro.Ordenando).
                                                 Skip((filtro.numeroPagina - 1) * filtro.tamanoPagina).
                                                 Take(filtro.tamanoPagina)
