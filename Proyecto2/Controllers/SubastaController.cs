@@ -129,6 +129,7 @@ namespace Proyecto2.Controllers
         
             if (ModelState.IsValid)
             {
+                subasta.PrecioActual = subasta.PrecioInicial;
                 Respuesta<Subasta> notificacion = await _cR.Actualizar(subasta);
 
                 if (!notificacion._estado || notificacion._excepcion)

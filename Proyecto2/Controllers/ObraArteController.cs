@@ -167,7 +167,7 @@ namespace Proyecto2.Controllers
 
                 dimensionObra.ObraArte = respObraArte.objecto.Id;
                 Respuesta<DimensionObra> respDimensionObra = await _cRDO.Actualizar(dimensionObra);
-                List<string> agregar = listImgEliminar == null  ? new List<string>() : listImgAgregar.Split('^').ToList();
+                List<string> agregar = listImgAgregar == null  ? new List<string>() : listImgAgregar.Split('^').ToList();
                 List<string> eliminar = listImgEliminar == null ? new List<string>() : listImgEliminar.Split('^').ToList();
 
                 List<string> elementosAgregar = agregar.Where(x => eliminar.Contains(x) == false && x != "").ToList();

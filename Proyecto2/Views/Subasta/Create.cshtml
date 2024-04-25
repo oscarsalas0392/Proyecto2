@@ -1,43 +1,40 @@
 ﻿@model Proyecto2.Model.Subasta
 
+<a class="regresar" asp-action="Index"><i class="fas fa-arrow-left"></i></a>
+<h4 class="d-inline-block">Agregar Subasta</h4>
 
-<h4>Subasta</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <input type="hidden" asp-for="Id" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ObraArte" class="control-label"></label>
+            <div class="form-group pt-3">
+                <label asp-for="ObraArte" class="control-label">Obra Arte</label>
                 <select asp-for="ObraArte" class ="form-control" asp-items="ViewBag.ObraArte"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group pt-3">
                 <label asp-for="PrecioInicial" class="control-label">Precio Inicial</label>
                 <input asp-for="PrecioInicial" class="form-control" />
                 <span asp-validation-for="PrecioInicial" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group pt-3">
                 <label asp-for="FechaInicial" class="control-label">Fecha Inicial</label>
                 <input asp-for="FechaInicial" class="form-control" />
                 <span asp-validation-for="FechaInicial" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group pt-3">
                 <label asp-for="FechaCierre" class="control-label">Fecha Cierre</label>
                 <input asp-for="FechaCierre" class="form-control" />
                 <span asp-validation-for="FechaCierre" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group pt-3">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -7,7 +7,7 @@
     <div class="col-4 content-image">
          <img id="principalImage" src="@Model?.ObraArteNavigation?.ImagenObra?.FirstOrDefault()?.Imagen" class="w-100 h-100"/>
          <div class=" row content_images">
-            @foreach (ImagenObra imagenObra in Model?.ObraArteNavigation?.ImagenObra )
+            @foreach (ImagenObra imagenObra in Model?.ObraArteNavigation?.ImagenObra.Where(x=> x.Eliminado ==false).ToList() )
             {
                <button class="col btn_Image">
                     <img  src="@imagenObra.Imagen" class="image" />
@@ -74,6 +74,7 @@
 
     images.forEach(x => { 
         x.addEventListener('click', (event) => {
+            event.preventDefault();
             const src = event.target.src;
             const principalImage = document.getElementById('principalImage');
             principalImage.src = src;

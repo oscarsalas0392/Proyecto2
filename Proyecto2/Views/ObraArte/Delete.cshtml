@@ -6,9 +6,10 @@
 
 <h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>¿Usted está seguro de eliminar esto?</h3>
 <div>
-    <h4>ObraArte</h4>
+    <a class="regresar" asp-action="Index"><i class="fas fa-arrow-left"></i></a>
+    <h4 class="d-inline-block">ObraArte</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -31,9 +32,8 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="Delete" class="pt-3">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Elimnar" class="btn btn-danger" /> 
     </form>
 </div>

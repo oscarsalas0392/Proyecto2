@@ -1,63 +1,44 @@
 ﻿@model Proyecto2.Model.Subasta
 
-@{
-    Layout = null;
-}
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
 
 <div>
-    <h4>Subasta</h4>
+    <a class="regresar" asp-action="Index"><i class="fas fa-arrow-left"></i></a>
+    <h4 class="d-inline-block">Subasta</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrecioInicial)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrecioInicial)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrecioActual)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrecioActual)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaInicial)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaInicial)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCierre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaCierre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Eliminado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Eliminado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ObraArteNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ObraArteNavigation.Id)
-        </dd>
+            <dt class="col-sm-2">
+                Titulo
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ObraArteNavigation.Titulo)
+            </dd>
+            <dt class="col-sm-2">
+                Precio Inicial
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PrecioInicial)
+            </dd>
+            <dt class="col-sm-2">
+                Precio Actual
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PrecioActual)
+            </dd>
+            <dt class="col-sm-2">
+                Fecha Inicial
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaInicial)
+            </dd>
+            <dt class="col-sm-2">
+                Fecha Cierre
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaCierre)
+            </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="pt-3">
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> 
 </div>
-</body>
-</html>
