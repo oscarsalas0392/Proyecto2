@@ -15,22 +15,22 @@ public partial class Artista
 
     public int Usuario { get; set; }
 
-    [Required]
+  
     [StringLength(100)]
     [Unicode(false)]
     public string Nombre { get; set; }
 
-    [Required]
+
     [StringLength(300)]
     [Unicode(false)]
     public string Informacion { get; set; }
 
-    [Required]
+
     [StringLength(300)]
     [Unicode(false)]
     public string Estilo { get; set; }
 
-    [Required]
+  
     [StringLength(300)]
     [Unicode(false)]
     public string Experiencia { get; set; }

@@ -8,24 +8,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Agregar a Subasta</h1>
+<h1>Historial de Subastas</h1>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Agregar</a>
-</p>
+
 <form id="form1" asp-antiforgery="false">
     <div class="d-flex flex-column">
-        <div>
-            <input id="command" asp-for="Command" type="hidden" />
-            <input id="page" asp-for="paginacion.numeroPagina" type="hidden" />
-            <input id="sort" asp-for="paginacion.columnaOrdenar" type="hidden" />
-            <input id="sortdir" asp-for="paginacion.tipoOrdernar" type="hidden" />
 
-            <div class="group">
-                <input class="form-control" asp-for="filtro.Descripcion" placeholder="Buscar aquí ..." />
-                <button class="btn btn-dark" data-command="search">Buscar</button>
-            </div>
-        </div>
         <table class="table">
             <thead>
                 <tr>
