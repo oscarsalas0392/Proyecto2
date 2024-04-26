@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Proyecto2.Data;
 using Proyecto2.Data.ClasesRepository;
 using Proyecto2.Data.Interfaces;
+using Proyecto2.Enums;
 using Proyecto2.Model;
 using Proyecto2.Respuesta;
 
@@ -27,6 +28,16 @@ namespace Proyecto2.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+
+        public IActionResult Salir()
+        {
+            HttpContext.Session.SetString(SessionKey.usuario.ToString(), "");
+            HttpContext.Session.SetString(SessionKey.artista.ToString(), "");
+
+            return RedirectToAction("Login", "Acceso");
+
         }
 
         public async Task<IActionResult> Registrar()

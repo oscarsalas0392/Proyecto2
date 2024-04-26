@@ -41,8 +41,6 @@ public partial class Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
-
         modelBuilder.Entity<Artista>(entity =>
         {
             entity.HasOne(d => d.UsuarioNavigation).WithMany(p => p.Artista)
@@ -100,6 +98,8 @@ public partial class Context : DbContext
 
         modelBuilder.Entity<Oferta>(entity =>
         {
+            entity.ToTable(tb => tb.HasTrigger("actualizarPrecioActual"));
+
             entity.HasOne(d => d.SubastaNavigation).WithMany(p => p.Oferta)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Oferta_Subasta");
@@ -140,6 +140,7 @@ public partial class Context : DbContext
 
         OnModelCreatingPartial(modelBuilder);
     }
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

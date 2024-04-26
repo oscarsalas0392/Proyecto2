@@ -7,7 +7,7 @@
 
 @{
     string? json = HttpContextAccessor.HttpContext.Session.GetString(SessionKey.usuario.ToString());
-    bool login = json is null ? true : false;
+    bool login = json is null || json == "" ? true : false;
     Usuario usuario = null;
     if (!login)
     {
@@ -103,6 +103,10 @@
                            </a>
 
                        </button>
+
+                        <a class="buttonPhoto" asp-controller="Acceso" asp-action="Salir">
+                            <img class="photoUser" src="~/images/box-arrow-right.svg" />
+                        </a>
                         
                     }
                 </div>

@@ -15,27 +15,26 @@ public partial class Artista
 
     public int Usuario { get; set; }
 
-  
     [StringLength(100)]
     [Unicode(false)]
     public string Nombre { get; set; }
 
-
+    
     [StringLength(300)]
     [Unicode(false)]
     public string Informacion { get; set; }
 
-
+  
     [StringLength(300)]
     [Unicode(false)]
     public string Estilo { get; set; }
 
-  
+   
     [StringLength(300)]
     [Unicode(false)]
     public string Experiencia { get; set; }
 
-    [Required]
+ 
     [StringLength(200)]
     [Unicode(false)]
     public string Enlace { get; set; }
